@@ -1,0 +1,27 @@
+.card {
+  background-color: var(--color-white);
+  padding: 2rem;
+
+  display: flex;
+  align-items: center;
+
+  cursor: pointer;
+}
+
+.profile__img {
+  width: var(--small-img-size);
+  height: var(--small-img-size);
+  margin-right: 1.2rem;
+}
+
+.profile__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  border-radius: 50%;
+}
+
+.profile__info {
+  font-size: 2rem;
+}

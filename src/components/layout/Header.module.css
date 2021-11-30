@@ -1,0 +1,23 @@
+.header {
+  border-bottom: 1px solid #eef;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+
+  background-color: var(--color-white);
+}
+
+.header__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--header-height);
+}
+
+.header__group {
+  display: flex;
+  align-items: center;
+}

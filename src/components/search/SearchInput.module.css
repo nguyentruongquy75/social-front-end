@@ -1,0 +1,30 @@
+.search-input {
+  height: 4rem;
+  width: 30rem;
+  padding-right: 4rem;
+  background-color: var(--color-gray-light);
+  border-radius: 2rem;
+  margin-left: 2rem;
+
+  position: relative;
+}
+
+.search-input input {
+  height: 100%;
+  width: 100%;
+  background-color: transparent;
+  padding-left: 2rem;
+
+  font-size: 1.4rem;
+}
+
+.search-input button {
+  position: absolute;
+  top: 50%;
+  right: 2rem;
+  transform: translate(50%, -50%);
+
+  font-size: 1.3rem;
+  color: #aaa;
+  background-color: transparent;
+}

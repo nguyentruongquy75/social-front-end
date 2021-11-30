@@ -1,0 +1,15 @@
+.avatar {
+  width: var(--small-img-size);
+  height: var(--small-img-size);
+  border-radius: 50%;
+  overflow: hidden;
+
+  margin-left: 2rem;
+  cursor: pointer;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

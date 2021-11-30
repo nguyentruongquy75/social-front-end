@@ -1,0 +1,66 @@
+.post-action {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+
+  font-size: 1.5rem;
+  margin-top: 0.4rem;
+}
+
+.post-action button {
+  padding: 0.8rem 0;
+  background-color: transparent;
+}
+
+.post-action button:hover {
+  background-color: var(--color-gray-light);
+}
+
+.post-action button:hover .reactions {
+  opacity: 1;
+}
+
+.post-action i {
+  margin-right: 0.8rem;
+}
+
+.reactions {
+  display: flex;
+  align-items: center;
+
+  position: absolute;
+  top: -1rem;
+  left: 0;
+
+  padding: 0.8rem;
+  background-color: var(--color-white);
+  border-radius: 3rem;
+
+  border: 1px solid #eee;
+
+  opacity: 0;
+  transition: 0s;
+  transition-delay: 0.8s;
+
+  cursor: default;
+}
+
+.reactions > div {
+  width: var(--small-img-size);
+  height: var(--small-img-size);
+
+  cursor: pointer;
+}
+
+.reactions > div:hover {
+  transform: scale(1.2);
+}
+
+.reactions > div + div {
+  margin-left: 0.8rem;
+}
+
+.reactions img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

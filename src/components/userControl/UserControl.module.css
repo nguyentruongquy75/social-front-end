@@ -1,0 +1,55 @@
+.user-control {
+  display: flex;
+}
+
+.user-control li {
+  width: var(--small-img-size);
+  height: var(--small-img-size);
+  border-radius: 50%;
+
+  font-size: 2rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: var(--color-gray-light);
+
+  position: relative;
+}
+
+.user-control li:hover {
+  background-color: var(--color-white-blue);
+  color: var(--color-blue);
+  cursor: pointer;
+}
+
+.user-control li + li {
+  margin-left: 2rem;
+}
+
+.count {
+  --size: 1.6rem;
+
+  width: var(--size);
+  height: var(--size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translateY(-50%);
+
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-white);
+  background-color: var(--color-red);
+}
+
+.user-control li.active {
+  background-color: var(--color-white-blue);
+  color: var(--color-blue);
+}
