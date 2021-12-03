@@ -27,10 +27,6 @@
   transition: 0.2s linear;
 }
 
-.input textarea:focus {
-  height: 12rem;
-}
-
 .post__bottom {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

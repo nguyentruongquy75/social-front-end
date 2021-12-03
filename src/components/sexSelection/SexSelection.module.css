@@ -1,0 +1,34 @@
+.sex-selection__container {
+  margin-top: 0.6rem;
+}
+
+.label {
+  font-size: 1.3rem;
+  font-weight: 400;
+}
+
+.sex-selection {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.2rem;
+}
+
+.sex-selection > div {
+  position: relative;
+}
+
+.sex-selection label {
+  border: 1px solid #dddfe2;
+  padding: 0.8rem;
+  width: 100%;
+  height: 3.6rem;
+  border-radius: 0.6rem;
+}
+
+.sex-selection input {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-55%);
+  margin: 0 !important;
+}

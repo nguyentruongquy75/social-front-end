@@ -9,6 +9,40 @@
 .post-action button {
   padding: 0.8rem 0;
   background-color: transparent;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.post-action button > img {
+  --size: 2.4rem;
+  width: var(--size);
+  height: var(--size);
+  margin-right: 0.4rem;
+}
+
+.post-action button.Like {
+  font-weight: 600;
+  color: var(--color-blue);
+}
+
+.post-action button.Love {
+  font-weight: 600;
+  color: #f33e58;
+}
+
+.post-action button.Care,
+.post-action button.Haha,
+.post-action button.Wow,
+.post-action button.Sad {
+  font-weight: 600;
+  color: #f7b125;
+}
+
+.post-action button.Angry {
+  font-weight: 600;
+  color: #e9710f;
 }
 
 .post-action button:hover {
@@ -17,6 +51,7 @@
 
 .post-action button:hover .reactions {
   opacity: 1;
+  visibility: visible;
 }
 
 .post-action i {
@@ -27,6 +62,7 @@
   display: flex;
   align-items: center;
 
+  visibility: hidden;
   position: absolute;
   top: -1rem;
   left: 0;
@@ -39,7 +75,7 @@
 
   opacity: 0;
   transition: 0s;
-  transition-delay: 0.8s;
+  transition-delay: 0.4s;
 
   cursor: default;
 }

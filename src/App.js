@@ -1,34 +1,32 @@
 import "./App.css";
-import Contact from "./components/contact/Contact";
+import { Route, Routes, Navigate } from "react-router-dom";
+
 import Header from "./components/layout/Header";
 import Main from "./components/layout/Main";
-import Nav from "./components/layout/Nav";
-import Post from "./components/post/Post";
-import PostCreate from "./components/post/PostCreate";
-import ProfileCard from "./components/profileCard/ProfileCard";
-import Request from "./components/request/Request";
+import AuthPage from "./pages/AuthPage";
+import HomePage from "./pages/HomePage";
+import ProfilePage from "./pages/ProfilePage";
+import PrivateRoute from "./components/privateRoute/PrivateRoute";
 
 function App() {
   return (
-    <>
-      <Header />
-      <Main>
-        <aside>
-          <ProfileCard />
-          <Nav />
-        </aside>
-
-        <div>
-          <PostCreate />
-          <Post />
-        </div>
-
-        <aside>
-          <Request />
-          <Contact />
-        </aside>
-      </Main>
-    </>
+    <Routes>
+      <Route path="/auth/*" element={<AuthPage />} />
+      <Route
+        path="/*"
+        element={
+          <PrivateRoute>
+            <Header />
+            <Main>
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/profile/*" element={<ProfilePage />} />
+              </Routes>
+            </Main>
+          </PrivateRoute>
+        }
+      />
+    </Routes>
   );
 }
 

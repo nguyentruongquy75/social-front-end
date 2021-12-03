@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import Card from "../ui/Card";
 
 import styles from "./Post.module.css";
@@ -6,17 +6,58 @@ import PostSetting from "./PostSetting";
 
 import GridImage from "react-fb-image-grid";
 
-// reactions
-import SadIcon from "../../assets/img/sad.png";
-import AngryIcon from "../../assets/img/angry.png";
 import PostAction from "./PostAction";
 
-const test = [
-  "https://images.unsplash.com/photo-1638063761244-57fee5d1d1f8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw0fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
-  "https://images.unsplash.com/photo-1638137392998-cd8a1b4775b8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
-];
+import reactionsIcon from "../../reactions";
 
-export default function Post() {
+export default function Post(props) {
+  const postId = props.post._id;
+  const title = props.post.title;
+  const images = props.post.image;
+  const user = props.post.user;
+  const publishedAt = new Date(props.post.publishedAt);
+  const comments = props.post.comments;
+
+  const [reactions, setReactions] = useState(props.post.reactions);
+
+  const duration = Date.now() - publishedAt;
+
+  const convertDurationToString = (duration) => {
+    const seconds = duration / 1000;
+    const minutes = seconds / 60;
+
+    if (minutes < 60) {
+      return `${Math.floor(minutes)} phút trước`;
+    }
+    const hours = minutes / 60;
+    if (hours < 24) {
+      return `${Math.floor(hours)} giờ trước`;
+    }
+
+    const days = hours / 24;
+
+    return `${Math.floor(days)} ngày trước`;
+  };
+
+  const getTwoMostReactions = (reactions) => {
+    const uniqueReaction = new Set(reactions);
+
+    const result = Array.from(uniqueReaction).map((reaction) => {
+      const reactionCount = reactions.filter(
+        (item) => item.type === reaction.type
+      ).length;
+
+      return {
+        type: reaction.type,
+        count: reactionCount,
+      };
+    });
+
+    return result.slice(0, 2);
+  };
+
+  const twoMostReactions = getTwoMostReactions(reactions);
+
   return (
     <Card className={styles.card}>
       <div className={styles["post__top"]}>
@@ -28,8 +69,12 @@ export default function Post() {
             />
           </div>
           <div>
-            <h6 className={styles["user__name"]}>Nguyen Truong Quy</h6>
-            <span className={styles["published-at"]}>15 minutes ago</span>
+            <h6
+              className={styles["user__name"]}
+            >{`${user.lastName} ${user.firstName}`}</h6>
+            <span className={styles["published-at"]}>
+              {convertDurationToString(duration)}
+            </span>
           </div>
         </div>
 
@@ -37,16 +82,11 @@ export default function Post() {
       </div>
 
       <div className={styles["post__content"]}>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod enim,
-          voluptas atque non error neque ab, placeat nobis corrupti, voluptate
-          quisquam? Numquam eos dignissimos neque asperiores fugiat cupiditate
-          sed. Quia?
-        </p>
+        <p>{title}</p>
       </div>
       <div className={styles["post__img"]}>
         <GridImage
-          images={test}
+          images={images || []}
           countFrom={3}
           renderOverlay={() => ""}
           overlayBackgroundColor={"#0000"}
@@ -57,22 +97,34 @@ export default function Post() {
       <div className={styles["post__bottom"]}>
         <div className={styles["post__info"]}>
           <div className={styles["post__reactions"]}>
-            <div>
-              <img src={SadIcon} alt="" />
-              <img src={AngryIcon} alt="" />
-            </div>
+            {reactions.length > 0 && (
+              <div>
+                {twoMostReactions.map((reaction) => {
+                  const reactionIcon = reactionsIcon.find(
+                    (item) => item.type === reaction.type
+                  ).icon;
 
-            <span className={styles["post__reactions-text"]}>
-              Truong Quy va 17 nguoi khac
-            </span>
+                  return <img key={reaction.type} src={reactionIcon} />;
+                })}
+              </div>
+            )}
+            {reactions.length > 0 && (
+              <span className={styles["post__reactions-text"]}>
+                {reactions.length}
+              </span>
+            )}
           </div>
           <div className={styles["post__info-right"]}>
-            <span>553 bình luận</span>
-            <span>43 lượt chia sẻ</span>
+            {comments.length > 0 && <span>{comments.length} bình luận</span>}
+            {/* <span>43 lượt chia sẻ</span> */}
           </div>
         </div>
 
-        <PostAction />
+        <PostAction
+          setReactions={setReactions}
+          reactions={reactions}
+          postId={postId}
+        />
       </div>
     </Card>
   );

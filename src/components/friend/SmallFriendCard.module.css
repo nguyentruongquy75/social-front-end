@@ -1,0 +1,14 @@
+.friend__avatar {
+  height: 10rem;
+}
+
+.friend__avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 0.6rem;
+  object-fit: cover;
+}
+
+.friend__name {
+  font-size: 1.4rem;
+}

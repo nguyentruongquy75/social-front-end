@@ -1,0 +1,48 @@
+.form__input input {
+  width: 100%;
+
+  border: 1px solid #dddfe2;
+  border-radius: 0.6rem;
+}
+
+.form__input label {
+  font-size: 1.3rem;
+  font-weight: 400;
+}
+
+.form__input .form__input-icon {
+  display: none;
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+
+  font-size: 1.6rem;
+}
+
+.form__input-icon.form__input-icon--display,
+.form__input-icon.form__input-icon--hide {
+  display: block;
+  cursor: pointer;
+}
+
+.form__input input:focus {
+  border-color: var(--color-blue);
+}
+
+.form__input .message {
+  display: block;
+  font-size: 1.2rem;
+  padding: 0.6rem 0.4rem 0;
+
+  color: var(--color-red);
+}
+
+.form__input.error input {
+  border-color: var(--color-red);
+}
+
+.form__input.error .form__input-icon--error {
+  display: block;
+  color: var(--color-red);
+}

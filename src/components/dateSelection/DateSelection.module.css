@@ -1,0 +1,18 @@
+.label {
+  font-size: 1.3rem;
+  font-weight: 400;
+}
+
+.date-selection {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.2rem;
+}
+
+.date-selection select {
+  height: 3.6rem;
+  border: 1px solid #dddfe2;
+  border-radius: 0.6rem;
+  outline: none;
+  padding: 0.8rem;
+}

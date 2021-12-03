@@ -1,10 +1,5 @@
 .main {
-  background-color: var(--color-gray-light);
-  padding-top: calc(var(--header-height) + 2rem);
-}
-
-.main__container {
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  gap: 4rem;
+  background-color: var(--color-background);
+  padding-top: var(--header-height);
+  padding-bottom: 2rem;
 }

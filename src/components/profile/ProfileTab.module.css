@@ -1,0 +1,51 @@
+.profile-tab {
+  padding: 0 2rem;
+  margin-top: 0.6rem;
+  text-align: center;
+}
+
+.profile-tab ul {
+  margin: 0;
+}
+
+.profile-tab li {
+  display: inline-block;
+}
+
+.profile-tab a {
+  --height: 6rem;
+  height: var(--height);
+  display: block;
+  padding: 0 1.6rem;
+
+  font-size: 1.7rem;
+  font-weight: 500;
+  line-height: var(--height);
+  color: #222;
+  text-decoration: none;
+  border-radius: 0.6rem;
+}
+
+.profile-tab a:hover {
+  background-color: #efefef;
+}
+
+.profile-tab a.active {
+  position: relative;
+  color: var(--color-blue);
+}
+
+.profile-tab a.active:hover {
+  background-color: transparent;
+}
+
+.profile-tab a.active::after {
+  content: "";
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: var(--color-blue);
+}

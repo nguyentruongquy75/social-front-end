@@ -1,55 +1,121 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import Button from "../ui/Button";
 
 import styles from "./PostAction.module.css";
 
-// image
+import reactionsIcon from "../../reactions";
+import userContext from "../../context/userCtx";
+import { API_post } from "../../config";
 
-import LikeIcon from "../../assets/img/like.png";
-import LoveIcon from "../../assets/img/love.png";
-import CareIcon from "../../assets/img/care.png";
-import HahaIcon from "../../assets/img/haha.png";
-import WowIcon from "../../assets/img/wow.png";
-import SadIcon from "../../assets/img/sad.png";
-import AngryIcon from "../../assets/img/angry.png";
+export default function PostAction(props) {
+  const context = useContext(userContext);
+  const reactions = props.reactions;
 
-const reactionsArr = ["like", "love", "care", "haha", "wow", "sad", "angry"];
+  const authReaction = reactions.find(
+    (reaction) => reaction.user === context.id
+  );
 
-export default function PostAction() {
+  const initialReaction = authReaction
+    ? reactionsIcon.find((reaction) => reaction.type === authReaction.type)
+    : null;
+  const [reaction, setReaction] = useState(initialReaction);
+
+  const changeReaction = (e) => {
+    const clickedReaction = reactionsIcon[e.target.dataset.index];
+    setReaction(clickedReaction);
+  };
+
+  const toggleButtonHandler = (e) => {
+    if (reaction) {
+      setReaction(null);
+    } else {
+      // default Like
+      setReaction(reactionsIcon.find((item) => item.type === "Like"));
+    }
+  };
+
+  useEffect(async () => {
+    if (reaction !== initialReaction) {
+      // Add and update reaction
+      if (reaction) {
+        try {
+          const newReaction = {
+            type: reaction.type,
+            user: context.id,
+          };
+          if (authReaction) {
+            Object.assign(newReaction, {
+              _id: authReaction._id,
+            });
+          }
+          const response = await fetch(
+            `${API_post}/${props.postId}/reactions`,
+            {
+              method: authReaction ? "PATCH" : "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(newReaction),
+            }
+          );
+          const savedReaction = await response.json();
+
+          // set reaction
+
+          props.setReactions((prev) => [
+            ...prev.filter((item) => item._id !== savedReaction._id),
+            savedReaction,
+          ]);
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        // remove reaction
+        const response = await fetch(`${API_post}/${props.postId}/reactions`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            _id: authReaction._id,
+          }),
+        });
+        const deletedReaction = await response.json();
+
+        props.setReactions((prev) => [
+          ...prev.filter((item) => item._id !== deletedReaction._id),
+        ]);
+      }
+    }
+  }, [reaction]);
+
   return (
     <div className={styles["post-action"]}>
-      <Button>
-        <i className="far fa-thumbs-up"></i>
-        Like
-        <div className={styles.reactions}>
-          <div>
-            <img src={LikeIcon} alt="like" />
-          </div>
-
-          <div>
-            <img src={LoveIcon} alt="love" />
-          </div>
-
-          <div>
-            <img src={CareIcon} alt="care" />
-          </div>
-
-          <div>
-            <img src={HahaIcon} alt="haha" />
-          </div>
-
-          <div>
-            <img src={SadIcon} alt="sad" />
-          </div>
-
-          <div>
-            <img src={WowIcon} alt="wow" />
-          </div>
-
-          <div>
-            <img src={AngryIcon} alt="angry" />
-          </div>
+      <Button
+        onClick={toggleButtonHandler}
+        className={reaction && styles[reaction.type]}
+      >
+        {reaction && (
+          <>
+            <img src={reaction.icon} alt={reaction.type} /> {reaction.type}
+          </>
+        )}
+        {!reaction && (
+          <>
+            <i className="far fa-thumbs-up"></i> Like
+          </>
+        )}
+        <div onClick={(e) => e.stopPropagation()} className={styles.reactions}>
+          {reactionsIcon.map((reaction, index) => (
+            <div key={index} onClick={changeReaction}>
+              <img
+                src={reaction.icon}
+                data-index={index}
+                alt={`${reaction.type}`}
+              />
+            </div>
+          ))}
         </div>
       </Button>
 

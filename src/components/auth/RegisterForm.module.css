@@ -1,0 +1,44 @@
+.form__input {
+  margin-bottom: 1.4rem;
+}
+
+.form__input input {
+  padding: 1.8rem;
+  height: 4rem;
+}
+
+.form__top {
+  text-align: center;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #dddfe2;
+}
+
+.form__top h4 {
+  font-size: 2.2rem;
+  font-weight: 600;
+}
+
+.form__input-name {
+  display: flex;
+  gap: 1.2rem;
+
+  margin-top: 2rem;
+}
+
+.register__button {
+  text-align: center;
+}
+
+.register__button button {
+  margin-top: 1.2rem;
+  width: 50%;
+
+  font-size: 1.5rem;
+  background-color: var(--color-green);
+  color: var(--color-white);
+}
+
+.signin-action {
+  text-align: center;
+  margin-top: 1.2rem;
+}

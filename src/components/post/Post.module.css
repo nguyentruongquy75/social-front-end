@@ -1,8 +1,8 @@
 .card {
   background-color: var(--color-white);
-  margin-top: 2rem;
+  margin-top: 1.4rem;
 
-  padding: 2rem;
+  padding: 2rem 2rem 0;
 }
 
 .post__top {

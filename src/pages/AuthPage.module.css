@@ -1,0 +1,28 @@
+.auth {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  background-color: #f0f2f5;
+  padding: 2rem 0;
+
+  min-height: 100vh;
+}
+
+.card {
+  background-color: var(--color-white);
+  padding: 2rem;
+  width: 40rem;
+  max-width: 100%;
+}
+
+.logo {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.logo object {
+  width: 20rem;
+  height: 7rem;
+}

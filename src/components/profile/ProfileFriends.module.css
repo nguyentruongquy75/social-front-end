@@ -1,0 +1,35 @@
+.card {
+  background-color: var(--color-white);
+  padding: 1.8rem;
+  margin-top: 1.8rem;
+}
+
+.card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.2rem;
+}
+
+.card__top a {
+  font-size: 1.5rem;
+  text-decoration: none;
+  padding: 0.8rem;
+  border-radius: 0.4rem;
+}
+
+.card__top a:hover {
+  background-color: var(--color-gray-light);
+  color: var(--color-blue);
+}
+
+.heading {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.friend__list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.2rem;
+}

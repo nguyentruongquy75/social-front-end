@@ -1,0 +1,49 @@
+.card {
+  background-color: var(--color-white);
+  padding: 2rem;
+}
+
+.card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.heading {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.search {
+  min-width: 22rem;
+  height: 3.6rem;
+  position: relative;
+
+  border-radius: 2rem;
+  overflow: hidden;
+}
+
+.search__icon {
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  transform: translateY(-50%);
+
+  color: var(--color-gray);
+}
+
+.search input {
+  width: 100%;
+  height: 100%;
+  padding: 0.8rem 0.8rem 0.8rem 3.2rem;
+
+  background-color: #f0f2f5;
+}
+
+.friend__list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.8rem;
+
+  margin-top: 2rem;
+}

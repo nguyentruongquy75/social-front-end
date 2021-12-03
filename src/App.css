@@ -6,12 +6,16 @@
 
 :root {
   --small-img-size: 4rem;
-  --color-gray-light: #fafafa;
+  --color-gray-light: #f0f2f5;
   --color-white-blue: #f2f5ff;
-  --color-blue: #1b74e4;
+  --color-blue: #1877f2;
   --color-white: #fff;
-  --color-red: #e41e3f;
+  --color-red: #f02849;
   --color-gray: #aaa;
+  --color-green: #42b72a;
+  --color-border: #dddfe2;
+
+  --color-background: #f0f2f5;
 
   --color-pink-light: rgb(255, 239, 242);
   --color-pink: rgb(254, 66, 86);
@@ -28,7 +32,7 @@ html {
 
 body {
   box-sizing: border-box;
-  font-family: "Be Vietnam Pro", sans-serif;
+  font-family: "Be Vietnam Pro", sans-serif !important;
 }
 
 ul {
@@ -40,9 +44,17 @@ a {
   text-decoration: none;
 }
 
+a:hover {
+  text-decoration: none;
+}
+
 input,
 textarea,
 button {
   outline: none;
   border: none;
+}
+
+.relative {
+  position: relative;
 }

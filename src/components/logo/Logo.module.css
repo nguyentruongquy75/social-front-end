@@ -1,7 +1,12 @@
+.logo__link {
+  display: block;
+}
+
 .logo {
   width: var(--small-img-size);
   height: var(--small-img-size);
-  overflow: hidden;
+  position: relative;
+  z-index: -1;
 }
 
 .logo img {

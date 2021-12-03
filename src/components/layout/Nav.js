@@ -1,4 +1,6 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
+
 import Card from "../ui/Card";
 
 import styles from "./Nav.module.css";
@@ -8,38 +10,43 @@ export default function Nav() {
     <Card className={styles.card}>
       <ul className={styles.nav}>
         <li>
-          <a href="#" className={styles.active}>
-            <i className="fas fa-home"></i>
-            Home
-          </a>
-        </li>
-
-        <li>
-          <a href="#">
+          <NavLink
+            to="/"
+            className={({ isActive }) => (isActive ? styles.active : "")}
+          >
             <i className="far fa-newspaper"></i>
             News Feed
-          </a>
+          </NavLink>
         </li>
 
         <li>
-          <a href="#">
+          <NavLink
+            to="/friend"
+            className={({ isActive }) => (isActive ? styles.active : "")}
+          >
             <i className="far fa-address-book"></i>
             People
-          </a>
+          </NavLink>
         </li>
 
         <li>
-          <a href="#">
+          <NavLink
+            to="/profile/photo"
+            className={({ isActive }) => (isActive ? styles.active : "")}
+          >
             <i className="far fa-image"></i>
             Photos
-          </a>
+          </NavLink>
         </li>
 
         <li>
-          <a href="#">
+          <NavLink
+            to="/profile"
+            className={({ isActive }) => (isActive ? styles.active : "")}
+          >
             <i className="far fa-user"></i>
             Pofile
-          </a>
+          </NavLink>
         </li>
       </ul>
     </Card>
