@@ -7,7 +7,7 @@ import PostCreateModal from "./PostCreateModal";
 import styles from "./PostCreate.module.css";
 import Overlay from "../overlay/Overlay";
 
-export default function PostCreate() {
+export default function PostCreate(props) {
   const [isDisplayModal, setIsDisplayModal] = useState(false);
 
   const displayModal = () => setIsDisplayModal(true);
@@ -23,7 +23,9 @@ export default function PostCreate() {
 
   return (
     <>
-      {isDisplayModal && <PostCreateModal onClose={hideModal} />}
+      {isDisplayModal && (
+        <PostCreateModal onChange={props.onChange} onClose={hideModal} />
+      )}
       {isDisplayModal && <Overlay onClick={hideModal} />}
       <Card className={styles.card}>
         <h6 className={styles.heading}>

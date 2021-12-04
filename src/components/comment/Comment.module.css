@@ -1,0 +1,159 @@
+.comment {
+  display: flex;
+  margin-top: 0.8rem;
+}
+
+.comment__avatar {
+  --size: 3.2rem;
+  width: var(--size);
+  height: var(--size);
+
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 0.8rem;
+}
+
+.comment__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.comment__info-container {
+  flex: 1;
+}
+
+.comment__info {
+  padding: 0.6rem 1.4rem;
+  background-color: #f0f2f5;
+  border-radius: 1.8rem;
+  font-size: 1.4rem;
+
+  width: fit-content;
+
+  position: relative;
+}
+
+.comment__info h6 {
+  font-size: 1.4rem;
+}
+
+.comment__reaction {
+  position: absolute;
+  bottom: 0;
+  right: -2rem;
+
+  padding: 0.1rem 0.4rem;
+  border-radius: 2.5rem;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-white);
+
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.3rem;
+}
+
+.comment__reaction-icon {
+  --size: 1.6rem;
+  width: var(--size);
+  height: var(--size);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.comment__reaction-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.comment__action {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.2rem 0.8rem;
+
+  font-size: 1.3rem;
+  font-weight: 600;
+
+  position: relative;
+}
+
+.comment__action-reaction {
+  position: relative;
+  cursor: pointer;
+}
+
+.comment__action-reaction.Like {
+  font-weight: 600;
+  color: var(--color-blue);
+}
+
+.comment__action-reaction.Love {
+  font-weight: 600;
+  color: #f33e58;
+}
+
+.comment__action-reaction.Care,
+.comment__action-reaction.Haha,
+.comment__action-reaction.Wow,
+.comment__action-reaction.Sad {
+  font-weight: 600;
+  color: #f7b125;
+}
+
+.comment__action-reaction.Angry {
+  font-weight: 600;
+  color: #e9710f;
+}
+
+.comment__action-reaction:hover .comment__reaction--hover {
+  display: flex;
+}
+
+.comment__reaction--hover {
+  padding: 0.4rem;
+  background-color: var(--color-white);
+
+  border-radius: 2.5rem;
+  border: 1px solid var(--color-border);
+
+  gap: 0.6rem;
+
+  position: absolute;
+  bottom: 100%;
+  left: -2rem;
+
+  display: none;
+}
+
+.comment__reaction--hover img {
+  width: var(--small-img-size);
+  height: var(--small-img-size);
+
+  object-fit: cover;
+  transition: transform 0.2s linear;
+}
+
+.comment__reaction--hover img:hover {
+  cursor: pointer;
+  transform: scale(1.2);
+}
+
+.comment__action-reply {
+  cursor: pointer;
+}
+
+.comment__reply {
+  font-size: 1.4rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.comment__reply i {
+  margin-right: 0.6rem;
+}

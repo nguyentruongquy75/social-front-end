@@ -22,7 +22,7 @@ export default function PostCreateModal(props) {
     const formData = new FormData();
     formData.append("title", textRef.current.value);
     formData.append("user", context.id);
-    formData.append("image", imagePreview[0]);
+    formData.append("image", imagePreview ? imagePreview[0] : "");
 
     try {
       const response = await fetch(API_post, {
@@ -31,7 +31,8 @@ export default function PostCreateModal(props) {
       });
       const post = await response.json();
 
-      console.log(post);
+      props.onClose();
+      props.onChange();
     } catch (error) {
       console.log(error);
     }

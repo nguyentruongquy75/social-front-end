@@ -9,6 +9,7 @@ import GridImage from "react-fb-image-grid";
 import PostAction from "./PostAction";
 
 import reactionsIcon from "../../reactions";
+import PostComment from "./PostComment";
 
 export default function Post(props) {
   const postId = props.post._id;
@@ -19,12 +20,17 @@ export default function Post(props) {
   const comments = props.post.comments;
 
   const [reactions, setReactions] = useState(props.post.reactions);
+  const [isDisplayComment, setIsDisplayComment] = useState(false);
 
   const duration = Date.now() - publishedAt;
 
   const convertDurationToString = (duration) => {
     const seconds = duration / 1000;
     const minutes = seconds / 60;
+
+    if (seconds < 60) {
+      return "Vừa xong";
+    }
 
     if (minutes < 60) {
       return `${Math.floor(minutes)} phút trước`;
@@ -53,7 +59,11 @@ export default function Post(props) {
       };
     });
 
-    return result.slice(0, 2);
+    return result.sort((a, b) => b.count - a.count).slice(0, 2);
+  };
+
+  const displayComment = () => {
+    setIsDisplayComment(true);
   };
 
   const twoMostReactions = getTwoMostReactions(reactions);
@@ -124,8 +134,11 @@ export default function Post(props) {
           setReactions={setReactions}
           reactions={reactions}
           postId={postId}
+          onComment={displayComment}
         />
       </div>
+
+      {isDisplayComment && <PostComment postId={postId} />}
     </Card>
   );
 }

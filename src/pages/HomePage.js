@@ -16,6 +16,9 @@ import Post from "../components/post/Post";
 export default function HomePage() {
   const context = useContext(userContext);
   const [newsfeed, setNewsfeed] = useState([]);
+  const [isNewsfeedChange, setIsNewsfeedChange] = useState(false);
+
+  const changeNewsfeed = () => setIsNewsfeedChange((state) => !state);
 
   useEffect(async () => {
     try {
@@ -27,7 +30,7 @@ export default function HomePage() {
     } catch (err) {
       console.log(err);
     }
-  }, [context]);
+  }, [context, isNewsfeedChange]);
 
   return (
     <Wrapper className={styles.wrapper}>
@@ -37,7 +40,7 @@ export default function HomePage() {
       </aside>
 
       <div>
-        <PostCreate />
+        <PostCreate onChange={changeNewsfeed} />
         <PostList list={newsfeed} />
       </div>
 

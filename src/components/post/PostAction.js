@@ -20,6 +20,12 @@ export default function PostAction(props) {
     ? reactionsIcon.find((reaction) => reaction.type === authReaction.type)
     : null;
   const [reaction, setReaction] = useState(initialReaction);
+  const [isDisplayReactionHover, setIsDisplayReactionHover] = useState(true);
+
+  const hideReactionHover = (e) => {
+    e.stopPropagation();
+    setIsDisplayReactionHover(false);
+  };
 
   const changeReaction = (e) => {
     const clickedReaction = reactionsIcon[e.target.dataset.index];
@@ -90,6 +96,18 @@ export default function PostAction(props) {
     }
   }, [reaction]);
 
+  useEffect(() => {
+    if (!isDisplayReactionHover) {
+      const id = setTimeout(() => {
+        setIsDisplayReactionHover(true);
+      }, 500);
+
+      return () => {
+        clearTimeout(id);
+      };
+    }
+  }, [isDisplayReactionHover]);
+
   return (
     <div className={styles["post-action"]}>
       <Button
@@ -106,27 +124,24 @@ export default function PostAction(props) {
             <i className="far fa-thumbs-up"></i> Like
           </>
         )}
-        <div onClick={(e) => e.stopPropagation()} className={styles.reactions}>
-          {reactionsIcon.map((reaction, index) => (
-            <div key={index} onClick={changeReaction}>
-              <img
-                src={reaction.icon}
-                data-index={index}
-                alt={`${reaction.type}`}
-              />
-            </div>
-          ))}
-        </div>
+        {isDisplayReactionHover && (
+          <div onClick={hideReactionHover} className={styles.reactions}>
+            {reactionsIcon.map((reaction, index) => (
+              <div key={index} onClick={changeReaction}>
+                <img
+                  src={reaction.icon}
+                  data-index={index}
+                  alt={`${reaction.type}`}
+                />
+              </div>
+            ))}
+          </div>
+        )}
       </Button>
 
-      <Button>
+      <Button onClick={props.onComment}>
         <i className="far fa-comment"></i>
         Comment
-      </Button>
-
-      <Button>
-        <i className="fas fa-share"></i>
-        Share
       </Button>
     </div>
   );
