@@ -1,26 +1,45 @@
-import React, { useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
+import userContext from "../../context/userCtx";
 import Button from "../ui/Button";
 import Card from "../ui/Card";
 
 import styles from "./FriendInvitation.module.css";
 
-export default function FriendInvitation() {
+import { API_user } from "../../config";
+
+export default function FriendInvitation(props) {
+  const context = useContext(userContext);
+  const invitation = props.invitation;
+  const fullName = `${invitation.sender.lastName} ${invitation.sender.firstName}`;
   const [status, setStatus] = useState("pending");
 
   const accept = () => setStatus("accepted");
   const reject = () => setStatus("rejected");
 
+  useEffect(async () => {
+    if (status !== "pending") {
+      const response = await fetch(`${API_user}/${context.id}/invite`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          _id: invitation._id,
+          status,
+        }),
+      });
+      const updatedInvitation = await response.json();
+    }
+  }, [status]);
+
   return (
     <Card className={styles.card}>
       <div className={styles["invitation__image"]}>
-        <img
-          src="https://scontent.fsgn7-1.fna.fbcdn.net/v/t39.30808-1/s240x240/259438991_921344362109226_181562073755684793_n.jpg?_nc_cat=107&ccb=1-5&_nc_sid=7206a8&_nc_ohc=ZB5AzG_hcmAAX8loLYW&_nc_ht=scontent.fsgn7-1.fna&oh=5bf753f874ae9e3c6b1441f1375283bd&oe=61ABC9DC"
-          alt=""
-        />
+        <img src={invitation.sender.avatar} alt={fullName} />
       </div>
 
       <div className={styles["invitation__info"]}>
-        <h6 className={styles.name}>Duy Bang</h6>
+        <h6 className={styles.name}>{fullName}</h6>
 
         {status === "pending" && (
           <>

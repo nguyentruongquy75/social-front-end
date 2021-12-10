@@ -24,7 +24,7 @@
 
 .user {
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-columns: 1fr 1.5fr 1fr;
 
   padding: 0 2rem;
   border-bottom: 1px solid #ccced2;

@@ -1,5 +1,6 @@
 .user-control {
   display: flex;
+  position: relative;
 }
 
 .user-control li {
@@ -29,7 +30,7 @@
 }
 
 .count {
-  --size: 1.6rem;
+  --size: 1.8rem;
 
   width: var(--size);
   height: var(--size);

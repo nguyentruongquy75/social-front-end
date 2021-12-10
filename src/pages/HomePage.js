@@ -11,10 +11,10 @@ import Request from "../components/request/Request";
 import styles from "./HomePage.module.css";
 import { API } from "../config";
 import userContext from "../context/userCtx";
-import Post from "../components/post/Post";
 
 export default function HomePage() {
   const context = useContext(userContext);
+  const [status, setStatus] = useState("initial");
   const [newsfeed, setNewsfeed] = useState([]);
   const [isNewsfeedChange, setIsNewsfeedChange] = useState(false);
 
@@ -22,6 +22,7 @@ export default function HomePage() {
 
   useEffect(async () => {
     try {
+      setStatus("loading");
       const response = await fetch(`${API}user/${context.id}/newsfeed`);
       const newsfeed = await response.json();
       setNewsfeed(newsfeed);
@@ -29,6 +30,8 @@ export default function HomePage() {
       console.log(newsfeed);
     } catch (err) {
       console.log(err);
+    } finally {
+      setStatus("finished");
     }
   }, [context, isNewsfeedChange]);
 
@@ -41,7 +44,7 @@ export default function HomePage() {
 
       <div>
         <PostCreate onChange={changeNewsfeed} />
-        <PostList list={newsfeed} />
+        <PostList status={status} list={newsfeed} />
       </div>
 
       <aside>

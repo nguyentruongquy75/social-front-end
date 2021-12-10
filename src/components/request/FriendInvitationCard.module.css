@@ -40,3 +40,22 @@
   background-color: var(--color-blue);
   color: var(--color-white);
 }
+
+.invitation__status {
+  margin-top: 0.8rem;
+}
+
+.invitation__status button {
+  width: 100%;
+  cursor: default;
+}
+
+.invitation__status.accepted button {
+  background-color: var(--color-blue);
+  color: var(--color-white);
+}
+
+.invitation__status.rejected button {
+  background-color: var(--color-border);
+  color: var(--color-white);
+}

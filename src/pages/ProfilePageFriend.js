@@ -4,7 +4,7 @@ import Card from "../components/ui/Card";
 
 import styles from "./ProfilePageFriend.module.css";
 
-export default function ProfilePageFriend() {
+export default function ProfilePageFriend(props) {
   return (
     <Card className={styles["card"]}>
       <div className={styles["card__top"]}>
@@ -19,9 +19,9 @@ export default function ProfilePageFriend() {
       </div>
 
       <div className={styles["friend__list"]}>
-        <BigFriendCard />
-        <BigFriendCard />
-        <BigFriendCard />
+        {props.friends.map((friend) => (
+          <BigFriendCard key={friend._id} friend={friend} />
+        ))}
       </div>
     </Card>
   );

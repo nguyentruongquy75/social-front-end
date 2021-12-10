@@ -14,6 +14,7 @@
   --color-gray: #aaa;
   --color-green: #42b72a;
   --color-border: #dddfe2;
+  --color-gray-dark: #e4e6eb;
 
   --color-background: #f0f2f5;
 
@@ -28,6 +29,7 @@
 
 html {
   font-size: 62.5%;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -45,7 +47,7 @@ a {
 }
 
 a:hover {
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
 input,

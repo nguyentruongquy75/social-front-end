@@ -1,16 +1,20 @@
 import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 import styles from "./ProfileTab.module.css";
 
 export default function ProfileTab() {
+  const location = useLocation();
+
+  const path = location.pathname.slice(0, location.pathname.lastIndexOf("/"));
+
   return (
     <div className={styles["profile-tab"]}>
       <ul>
         <li>
           <NavLink
             className={({ isActive }) => (isActive ? styles.active : "")}
-            to="/profile/"
+            to={path + "/"}
           >
             Bài viết
           </NavLink>
@@ -19,7 +23,7 @@ export default function ProfileTab() {
         <li>
           <NavLink
             className={({ isActive }) => (isActive ? styles.active : "")}
-            to="/profile/introduction"
+            to={`${path}/introduction`}
           >
             Giới thiệu
           </NavLink>
@@ -28,7 +32,7 @@ export default function ProfileTab() {
         <li>
           <NavLink
             className={({ isActive }) => (isActive ? styles.active : "")}
-            to="/profile/friend"
+            to={`${path}/friend`}
           >
             Bạn bè
           </NavLink>
@@ -37,7 +41,7 @@ export default function ProfileTab() {
         <li>
           <NavLink
             className={({ isActive }) => (isActive ? styles.active : "")}
-            to="/profile/photo"
+            to={`${path}/photo`}
           >
             Ảnh
           </NavLink>

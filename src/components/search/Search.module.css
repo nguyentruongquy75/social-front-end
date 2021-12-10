@@ -79,3 +79,8 @@
 .search__result-item__info h4 {
   font-size: 1.6rem;
 }
+
+.loading {
+  display: flex;
+  justify-content: center;
+}

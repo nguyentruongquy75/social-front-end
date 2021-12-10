@@ -1,0 +1,107 @@
+.modal {
+  position: fixed;
+  z-index: 1000;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--color-white);
+
+  width: 70rem;
+  max-width: 100%;
+  z-index: 10001;
+}
+
+.modal__top {
+  padding: 0 6rem;
+  height: 6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-bottom: 1px solid var(--color-border);
+}
+
+.modal__heading {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.modal__close {
+  --size: 3.6rem;
+  position: absolute;
+  top: 1.6rem;
+  right: 1.6rem;
+
+  font-size: 2.6rem;
+
+  width: var(--size);
+  height: var(--size);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-gray-dark);
+  color: #bbb;
+  border-radius: 50%;
+
+  cursor: pointer;
+}
+
+.modal__body {
+  padding: 1.8rem;
+}
+
+.section__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section__heading {
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.section__body {
+  padding: 1.6rem;
+}
+
+.section__body input {
+  width: 50%;
+  padding: 0.8rem;
+  border-radius: 0.6rem;
+
+  border: 1px solid var(--color-border);
+}
+
+.section__body select {
+  border-radius: 0.6rem;
+  border: 1px solid var(--color-border);
+  outline: none;
+  padding: 0.8rem;
+}
+
+.modal__bottom {
+  padding: 1.8rem;
+  border-top: 1px solid var(--color-border);
+
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.8rem;
+}
+
+.button {
+  height: 3.6rem;
+  border-radius: 0.6rem;
+  padding: 0 1.2rem;
+
+  font-size: 1.6rem;
+  font-weight: 500;
+}
+
+.button--blue {
+  padding: 0 4rem;
+  background-color: var(--color-blue);
+  color: var(--color-white);
+}

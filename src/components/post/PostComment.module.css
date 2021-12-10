@@ -4,3 +4,8 @@
 .comment__list {
   margin-top: 0.8rem;
 }
+
+.loading {
+  display: flex;
+  justify-content: center;
+}

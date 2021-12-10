@@ -8,6 +8,7 @@ import userContext from "../../context/userCtx";
 
 import { API_comments } from "../../config";
 import Reply from "./Reply";
+import Spinner from "../spinner/Spinner";
 
 function Comment(props) {
   const context = useContext(userContext);
@@ -19,6 +20,7 @@ function Comment(props) {
   const [isDisplayReactionHover, setIsDisplayReactionHover] = useState(false);
   const [commentReactions, setCommentReactions] = useState(comment.reactions);
   const [reply, setReply] = useState([]);
+  const [status, setStatus] = useState("initial");
 
   // Reaction
   const authReaction = commentReactions.find(
@@ -146,10 +148,11 @@ function Comment(props) {
 
   useEffect(async () => {
     if (isDisplayReplyComments) {
+      setStatus("loading");
       const response = await fetch(`${API_comments}/${comment._id}/reply`);
       const reply = await response.json();
-
       setReply(reply);
+      setStatus("finished");
     }
   }, [isDisplayReplyComments]);
 
@@ -217,12 +220,13 @@ function Comment(props) {
           </div>
         </div>
 
-        {!isDisplayReplyComments && props.reply.length > 0 && (
+        {status !== "finished" && props.reply.length > 0 && (
           <div
             onClick={displayReplyComments}
             className={styles["comment__reply"]}
           >
             <i className="fas fa-reply"></i> {props.reply.length} phản hồi
+            {status === "loading" && <Spinner className={styles.spinner} />}
           </div>
         )}
 

@@ -1,7 +1,9 @@
 import React from "react";
-import FriendInvitation from "../components/friend/FriendInvitation";
+import { NavLink, Route, Routes } from "react-router-dom";
 
 import styles from "./PeoplePage.module.css";
+import PeoplePageFriends from "./PeoplePageFriends";
+import PeoplePageInvitations from "./PeoplePageInvitations";
 
 export default function PeoplePage() {
   return (
@@ -10,31 +12,34 @@ export default function PeoplePage() {
         <h3 className={styles.heading}>Bạn bè</h3>
         <ul>
           <li>
-            <a href="#">
+            <NavLink
+              to="/people/invitations"
+              className={({ isActive }) => (isActive ? styles["active"] : "")}
+            >
               <div className={styles.icon}>
                 <i className="fas fa-user-plus"></i>
               </div>
               Lời mời kết bạn
-            </a>
+            </NavLink>
           </li>
 
           <li>
-            <a href="#">
+            <NavLink
+              to="/people/friends"
+              className={({ isActive }) => (isActive ? styles["active"] : "")}
+            >
               <div className={styles.icon}>
                 <i class="fas fa-user-friends"></i>
               </div>
               Tất cả bạn bè
-            </a>
+            </NavLink>
           </li>
         </ul>
       </aside>
-
-      <div>
-        <h3 className={styles["invitation__heading"]}>Lời mời kết bạn</h3>
-        <div className={styles["invitation__list"]}>
-          <FriendInvitation />
-        </div>
-      </div>
+      <Routes>
+        <Route path="/invitations" element={<PeoplePageInvitations />} />
+        <Route path="/friends" element={<PeoplePageFriends />} />
+      </Routes>
     </div>
   );
 }

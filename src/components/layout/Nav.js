@@ -21,7 +21,7 @@ export default function Nav() {
 
         <li>
           <NavLink
-            to="/friend"
+            to="/people/invitations"
             className={({ isActive }) => (isActive ? styles.active : "")}
           >
             <i className="far fa-address-book"></i>
@@ -41,7 +41,7 @@ export default function Nav() {
 
         <li>
           <NavLink
-            to="/profile"
+            to="/profile/"
             className={({ isActive }) => (isActive ? styles.active : "")}
           >
             <i className="far fa-user"></i>

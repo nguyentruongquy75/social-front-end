@@ -37,7 +37,7 @@ export default function PostCreate(props) {
             <textarea placeholder="What's on your mind, Quy?" />
           </div>
         </div>
-        <div className={styles["post__bottom"]}>
+        {/* <div className={styles["post__bottom"]}>
           <Tag className={`${styles.tag} ${styles["tag--blue"]}`}>
             <div className={styles["tag__icon"]}>
               <i className="far fa-images"></i>
@@ -58,7 +58,7 @@ export default function PostCreate(props) {
             </div>
             <span>Felling</span>
           </Tag>
-        </div>
+        </div> */}
       </Card>
     </>
   );

@@ -1,9 +1,11 @@
 import React from "react";
 
-export default function Button(props) {
+const Button = React.forwardRef((props, ref) => {
   return (
-    <button className={props.className} onClick={props.onClick}>
+    <button ref={ref} className={props.className} onClick={props.onClick}>
       {props.children}
     </button>
   );
-}
+});
+
+export default Button;

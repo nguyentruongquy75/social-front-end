@@ -60,14 +60,3 @@
   font-size: 2rem;
   background-color: #e4e6eb;
 }
-
-.invitation__heading {
-  font-size: 2rem;
-  margin-bottom: 2rem;
-}
-
-.invitation__list {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-}

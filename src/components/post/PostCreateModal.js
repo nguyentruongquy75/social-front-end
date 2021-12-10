@@ -10,6 +10,7 @@ import { API_post } from "../../config";
 export default function PostCreateModal(props) {
   const context = useContext(userContext);
 
+  const [status, setStatus] = useState("initial");
   const [isAddPhoto, setIsAddPhoto] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
   const addPhoto = () => setIsAddPhoto(true);
@@ -25,6 +26,7 @@ export default function PostCreateModal(props) {
     formData.append("image", imagePreview ? imagePreview[0] : "");
 
     try {
+      setStatus("loading");
       const response = await fetch(API_post, {
         method: "POST",
         body: formData,
@@ -35,6 +37,8 @@ export default function PostCreateModal(props) {
       props.onChange();
     } catch (error) {
       console.log(error);
+    } finally {
+      setStatus("finished");
     }
   };
 
@@ -48,6 +52,9 @@ export default function PostCreateModal(props) {
 
   return (
     <Card className={styles.modal}>
+      {status === "loading" && (
+        <div className={styles["loading"]}>Đang đăng ...</div>
+      )}
       <form onSubmit={submitHandler}>
         <div className={styles["modal__top"]}>
           <h3>Tạo bài viết</h3>
@@ -60,10 +67,7 @@ export default function PostCreateModal(props) {
         <div className={styles["modal__body"]}>
           <div className={styles.user}>
             <div className={styles["user__avatar"]}>
-              <img
-                src="https://images.unsplash.com/photo-1638280987803-f533dba99cab?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxMHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
-                alt="Avatar"
-              />
+              <img src={context.avatar} alt={context.fullName} />
             </div>
 
             <div className={styles["user__info"]}>

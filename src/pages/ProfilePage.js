@@ -1,8 +1,12 @@
-import React from "react";
-import { Route, Routes } from "react-router-dom";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { Route, Routes, useParams, useLocation } from "react-router-dom";
+import Overlay from "../components/overlay/Overlay";
+import ProfileEdit from "../components/profile/ProfileEdit";
 
 import ProfileTab from "../components/profile/ProfileTab";
 import Button from "../components/ui/Button";
+import { API_user } from "../config";
+import userContext from "../context/userCtx";
 
 import styles from "./ProfilePage.module.css";
 import ProfilePageFriend from "./ProfilePageFriend";
@@ -10,53 +14,177 @@ import ProfilePageHome from "./ProfilePageHome";
 import ProfilePageIntroduction from "./ProfilePageIntroduction";
 import ProfilePagePhoto from "./ProfilePagePhoto";
 
-export default function ProfilePage() {
+let isInitial = true;
+export default function ProfilePage(props) {
+  const params = useParams();
+  const context = useContext(userContext);
+  const [user, setUser] = useState(null);
+  const isFriend = user && user.friends.find((item) => item._id === context.id);
+
+  const [invitation, setInvitation] = useState(null);
+  const [isSendedInvitation, setIsSendedInvitation] = useState(false);
+
+  // Profile Edit
+  const [isDisplayProfileEdit, setIsDisplayProfileEdit] = useState(false);
+  const displayProfileEdit = () => setIsDisplayProfileEdit(true);
+  const hideProfileEdit = () => setIsDisplayProfileEdit(false);
+
+  const toggleSendInvitation = () => {
+    if (isInitial) {
+      isInitial = false;
+    }
+    setIsSendedInvitation((isSend) => !isSend);
+  };
+
+  useEffect(async () => {
+    try {
+      const response = await fetch(
+        `${API_user}/${params.userId || props.userId}`
+      );
+      const user = await response.json();
+      const initialInvitation =
+        user &&
+        user.friendInvitations.find((item) => item.sender === context.id);
+      setUser(user);
+      setInvitation(initialInvitation);
+      setIsSendedInvitation(Boolean(initialInvitation));
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(async () => {
+    if (!isInitial) {
+      if (isSendedInvitation) {
+        const response = await fetch(`${API_user}/${user._id}/invite`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            sender: context.id,
+          }),
+        });
+        const newInvitation = await response.json();
+
+        setInvitation(newInvitation);
+      } else if (invitation && !isSendedInvitation) {
+        const response = await fetch(`${API_user}/${user._id}/invite`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            _id: invitation._id,
+          }),
+        });
+
+        setInvitation(null);
+      }
+    }
+  }, [isSendedInvitation]);
+
+  // css for display profile edit
+  const profileEditRef = useRef();
+  useEffect(() => {
+    if (isDisplayProfileEdit) {
+      document.documentElement.scrollTo(0, 0);
+      Object.assign(document.querySelector("main").style, {
+        height: profileEditRef.current.clientHeight + 100 + "px",
+        overflow: "hidden",
+      });
+    } else {
+      Object.assign(document.querySelector("main").style, {
+        height: null,
+        overflow: null,
+      });
+    }
+  }, [isDisplayProfileEdit]);
+
   return (
-    <div className={styles.wrapper}>
-      <div className={styles["profile__top"]}>
-        <div className={styles["cover-image"]}>
-          <img
-            src="https://images.unsplash.com/photo-1638237076831-a7f6c9dd58a5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxMnx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
-            alt=""
+    <>
+      {user && (
+        <div className={styles.wrapper}>
+          <div className={styles["profile__top"]}>
+            <div className={styles["cover-image"]}>
+              <img src={user.cover} alt={user.fullName} />
+            </div>
+
+            <div className={styles.user}>
+              <div className={styles["user__avatar"]}>
+                <img src={user.avatar} alt={user.fullName} />
+              </div>
+
+              <div className={styles["user__name"]}>
+                <h4>{user.fullName}</h4>
+              </div>
+
+              {context.id !== user._id && (
+                <div className={styles["user__action"]}>
+                  {!isFriend && (
+                    <Button
+                      onClick={toggleSendInvitation}
+                      className={
+                        isSendedInvitation ? styles["button--blue"] : ""
+                      }
+                    >
+                      <i className="fas fa-user-plus"></i>
+                      {isSendedInvitation ? "Huỷ lời mời" : "Thêm bạn bè"}
+                    </Button>
+                  )}
+                  {isFriend && (
+                    <Button>
+                      <i className="fas fa-user-check"></i>
+                      Bạn bè
+                    </Button>
+                  )}
+
+                  <Button className={styles["button--blue"]}>
+                    <i className="fab fa-facebook-messenger"></i>
+                    Nhắn tin
+                  </Button>
+                </div>
+              )}
+              {context.id === user._id && (
+                <div className={styles["user__action"]}>
+                  <Button onClick={displayProfileEdit}>
+                    <i className="fas fa-pen"></i>
+                    Chỉnh sửa trang cá nhân
+                  </Button>
+                </div>
+              )}
+            </div>
+
+            <ProfileTab />
+          </div>
+
+          <div className={styles["profile__body"]}>
+            <Routes>
+              <Route path="/" element={<ProfilePageHome user={user} />} />
+              <Route
+                path="/introduction"
+                element={<ProfilePageIntroduction user={user} />}
+              />
+              <Route
+                path="/friend"
+                element={<ProfilePageFriend friends={user.friends} />}
+              />
+              <Route path="/photo" element={<ProfilePagePhoto />} />
+            </Routes>
+          </div>
+        </div>
+      )}
+      {isDisplayProfileEdit && (
+        <>
+          <ProfileEdit
+            ref={profileEditRef}
+            onClose={hideProfileEdit}
+            user={user}
+            setUser={setUser}
           />
-        </div>
-
-        <div className={styles.user}>
-          <div className={styles["user__avatar"]}>
-            <img
-              src="https://images.unsplash.com/photo-1618874026570-e3c2fb1bd44a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTl8fGdpcmwlMjBhbG9uZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-              alt="Avatar"
-            />
-          </div>
-
-          <div className={styles["user__name"]}>
-            <h4>Do Nguyen</h4>
-          </div>
-
-          <div className={styles["user__action"]}>
-            <Button>
-              <i className="fas fa-user-check"></i>
-              Bạn bè
-            </Button>
-
-            <Button className={styles["button--blue"]}>
-              <i className="fab fa-facebook-messenger"></i>
-              Nhắn tin
-            </Button>
-          </div>
-        </div>
-
-        <ProfileTab />
-      </div>
-
-      <div className={styles["profile__body"]}>
-        <Routes>
-          <Route path="/" element={<ProfilePageHome />} />
-          <Route path="/introduction" element={<ProfilePageIntroduction />} />
-          <Route path="/friend" element={<ProfilePageFriend />} />
-          <Route path="/photo" element={<ProfilePagePhoto />} />
-        </Routes>
-      </div>
-    </div>
+          <Overlay onClick={hideProfileEdit} />
+        </>
+      )}
+    </>
   );
 }

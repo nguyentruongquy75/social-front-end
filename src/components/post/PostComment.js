@@ -3,6 +3,7 @@ import { API_post } from "../../config";
 
 import Comment from "../comment/Comment";
 import CommentInput from "../comment/CommentInput";
+import Spinner from "../spinner/Spinner";
 
 import styles from "./PostComment.module.css";
 
@@ -30,6 +31,11 @@ export default function PostComment(props) {
     <div className={styles["post__comment"]}>
       <CommentInput setComments={setComments} postId={postId} />
       <div className={styles["comment__list"]}>
+        {status === "loading" && (
+          <div className={styles.loading}>
+            <Spinner className={styles["spinner"]} />
+          </div>
+        )}
         {comments.map((comment) => (
           <Comment reply={comment.reply} key={comment._id} comment={comment} />
         ))}

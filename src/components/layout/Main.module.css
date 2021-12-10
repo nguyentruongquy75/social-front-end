@@ -2,4 +2,8 @@
   background-color: var(--color-background);
   padding-top: var(--header-height);
   padding-bottom: 2rem;
+
+  min-height: 100vh;
+
+  position: relative;
 }

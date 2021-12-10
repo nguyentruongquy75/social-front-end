@@ -5,3 +5,11 @@
   grid-template-columns: 1fr 1.5fr;
   gap: 1.4rem;
 }
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 10rem;
+}

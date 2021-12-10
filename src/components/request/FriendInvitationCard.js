@@ -1,10 +1,36 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { API_user } from "../../config";
+import userContext from "../../context/userCtx";
 import Card from "../ui/Card";
 import SmallButton from "../ui/SmallButton";
 
 import styles from "./FriendInvitationCard.module.css";
 
-export default function FriendInvitationCard() {
+export default function FriendInvitationCard(props) {
+  const invitation = props.invitation;
+  const fullName = `${invitation.sender.lastName} ${invitation.sender.firstName}`;
+  const context = useContext(userContext);
+  const [status, setStatus] = useState(invitation.status);
+
+  useEffect(async () => {
+    if (status !== "pending") {
+      const response = await fetch(`${API_user}/${context.id}/invite`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          _id: invitation._id,
+          status,
+        }),
+      });
+      const updatedInvitation = await response.json();
+    }
+  }, [status]);
+
+  const accept = () => setStatus("accepted");
+  const reject = () => setStatus("rejected");
+
   return (
     <Card className={styles["card"]}>
       <div className={styles["invitation__info"]}>
@@ -14,12 +40,24 @@ export default function FriendInvitationCard() {
             alt="Image"
           />
         </div>
-        <span>Truong Quy wants to add you to friends</span>
+        <span>{fullName} wants to add you to friends</span>
       </div>
-      <div className={styles["invitation__actions"]}>
-        <SmallButton className={styles["button--blue"]}>Accept</SmallButton>
-        <SmallButton>Decline</SmallButton>
-      </div>
+      {status === "pending" && (
+        <div className={styles["invitation__actions"]}>
+          <SmallButton onClick={accept} className={styles["button--blue"]}>
+            Accept
+          </SmallButton>
+          <SmallButton onClick={reject}>Decline</SmallButton>
+        </div>
+      )}
+
+      {status !== "pending" && (
+        <div className={`${styles["invitation__status"]} ${styles[status]}`}>
+          <SmallButton>
+            {status === "accepted" ? "You are friends" : "Rejected"}
+          </SmallButton>
+        </div>
+      )}
     </Card>
   );
 }
