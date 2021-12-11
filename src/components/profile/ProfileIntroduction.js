@@ -16,7 +16,6 @@ const status = {
 
 export default function ProfileIntroduction(props) {
   const user = props.user;
-  console.log(user);
   const createdAt = new Date(user.createdAt);
   return (
     <Card className={styles["card"]}>

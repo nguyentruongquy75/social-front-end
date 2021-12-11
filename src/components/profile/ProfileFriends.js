@@ -11,11 +11,16 @@ export default function ProfileFriends(props) {
     <Card className={styles.card}>
       <div className={styles["card__top"]}>
         <h4 className={styles.heading}>Bạn bè</h4>
-        <Link to="/people/friends">Xem tất cả bạn bè</Link>
+        {friends.length > 5 && (
+          <Link to="/people/friends">Xem tất cả bạn bè</Link>
+        )}
       </div>
 
       <div className={styles["friend__list"]}>
-        {friends.map((friend) => (
+        {friends.length === 0 && (
+          <span className={styles["message"]}>Chưa có bạn bè</span>
+        )}
+        {friends.slice(0, 5).map((friend) => (
           <SmallFriendCard key={friend._id} friend={friend} />
         ))}
       </div>

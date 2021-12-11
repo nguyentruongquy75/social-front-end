@@ -1,10 +1,10 @@
 import React from "react";
 import ProfileIntroduction from "../components/profile/ProfileIntroduction";
 
-export default function ProfilePageIntroduction() {
+export default function ProfilePageIntroduction(props) {
   return (
     <div>
-      <ProfileIntroduction />
+      <ProfileIntroduction user={props.user} />
     </div>
   );
 }

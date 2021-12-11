@@ -1,6 +1,8 @@
 .wrapper {
   width: 96rem;
   margin: 0 auto;
+
+  background-color: transparent;
 }
 
 .profile__top {
@@ -28,6 +30,8 @@
 
   padding: 0 2rem;
   border-bottom: 1px solid #ccced2;
+
+  background-color: var(--color-white);
 }
 
 .user__avatar {

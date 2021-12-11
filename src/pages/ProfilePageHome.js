@@ -12,6 +12,9 @@ import Spinner from "../components/spinner/Spinner";
 export default function ProfilePageHome(props) {
   const [status, setStatus] = useState("initial");
   const [posts, setPosts] = useState([]);
+  const [isPostsChange, setIsPostsChange] = useState(false);
+
+  const changePosts = () => setIsPostsChange((isChange) => !isChange);
 
   useEffect(async () => {
     try {
@@ -25,7 +28,7 @@ export default function ProfilePageHome(props) {
     } finally {
       setStatus("finished");
     }
-  }, []);
+  }, [isPostsChange]);
 
   return (
     <div className={styles["container"]}>
@@ -35,7 +38,7 @@ export default function ProfilePageHome(props) {
       </aside>
 
       <div>
-        <PostCreate />
+        <PostCreate onChange={changePosts} />
 
         {status === "loading" && (
           <div className={styles.loading}>

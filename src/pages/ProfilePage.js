@@ -84,6 +84,14 @@ export default function ProfilePage(props) {
     }
   }, [isSendedInvitation]);
 
+  //css for blank cover image
+  const coverRef = useRef();
+  useEffect(() => {
+    if (user && !user.cover) {
+      coverRef.current.style.backgroundColor = `var(--color-gray-light)`;
+    }
+  }, [user]);
+
   // css for display profile edit
   const profileEditRef = useRef();
   useEffect(() => {
@@ -104,75 +112,78 @@ export default function ProfilePage(props) {
   return (
     <>
       {user && (
-        <div className={styles.wrapper}>
+        <>
           <div className={styles["profile__top"]}>
-            <div className={styles["cover-image"]}>
-              <img src={user.cover} alt={user.fullName} />
-            </div>
-
-            <div className={styles.user}>
-              <div className={styles["user__avatar"]}>
-                <img src={user.avatar} alt={user.fullName} />
+            <div className={styles.wrapper}>
+              <div ref={coverRef} className={styles["cover-image"]}>
+                {user.cover && <img src={user.cover} alt={user.fullName} />}
               </div>
 
-              <div className={styles["user__name"]}>
-                <h4>{user.fullName}</h4>
+              <div className={styles.user}>
+                <div className={styles["user__avatar"]}>
+                  <img src={user.avatar} alt={user.fullName} />
+                </div>
+
+                <div className={styles["user__name"]}>
+                  <h4>{user.fullName}</h4>
+                </div>
+
+                {context.id !== user._id && (
+                  <div className={styles["user__action"]}>
+                    {!isFriend && (
+                      <Button
+                        onClick={toggleSendInvitation}
+                        className={
+                          isSendedInvitation ? styles["button--blue"] : ""
+                        }
+                      >
+                        <i className="fas fa-user-plus"></i>
+                        {isSendedInvitation ? "Huỷ lời mời" : "Thêm bạn bè"}
+                      </Button>
+                    )}
+                    {isFriend && (
+                      <Button>
+                        <i className="fas fa-user-check"></i>
+                        Bạn bè
+                      </Button>
+                    )}
+
+                    <Button className={styles["button--blue"]}>
+                      <i className="fab fa-facebook-messenger"></i>
+                      Nhắn tin
+                    </Button>
+                  </div>
+                )}
+                {context.id === user._id && (
+                  <div className={styles["user__action"]}>
+                    <Button onClick={displayProfileEdit}>
+                      <i className="fas fa-pen"></i>
+                      Chỉnh sửa trang cá nhân
+                    </Button>
+                  </div>
+                )}
               </div>
 
-              {context.id !== user._id && (
-                <div className={styles["user__action"]}>
-                  {!isFriend && (
-                    <Button
-                      onClick={toggleSendInvitation}
-                      className={
-                        isSendedInvitation ? styles["button--blue"] : ""
-                      }
-                    >
-                      <i className="fas fa-user-plus"></i>
-                      {isSendedInvitation ? "Huỷ lời mời" : "Thêm bạn bè"}
-                    </Button>
-                  )}
-                  {isFriend && (
-                    <Button>
-                      <i className="fas fa-user-check"></i>
-                      Bạn bè
-                    </Button>
-                  )}
-
-                  <Button className={styles["button--blue"]}>
-                    <i className="fab fa-facebook-messenger"></i>
-                    Nhắn tin
-                  </Button>
-                </div>
-              )}
-              {context.id === user._id && (
-                <div className={styles["user__action"]}>
-                  <Button onClick={displayProfileEdit}>
-                    <i className="fas fa-pen"></i>
-                    Chỉnh sửa trang cá nhân
-                  </Button>
-                </div>
-              )}
+              <ProfileTab />
             </div>
-
-            <ProfileTab />
           </div>
-
-          <div className={styles["profile__body"]}>
-            <Routes>
-              <Route path="/" element={<ProfilePageHome user={user} />} />
-              <Route
-                path="/introduction"
-                element={<ProfilePageIntroduction user={user} />}
-              />
-              <Route
-                path="/friend"
-                element={<ProfilePageFriend friends={user.friends} />}
-              />
-              <Route path="/photo" element={<ProfilePagePhoto />} />
-            </Routes>
+          <div className={styles.wrapper}>
+            <div className={styles["profile__body"]}>
+              <Routes>
+                <Route path="/" element={<ProfilePageHome user={user} />} />
+                <Route
+                  path="/introduction"
+                  element={<ProfilePageIntroduction user={user} />}
+                />
+                <Route
+                  path="/friend"
+                  element={<ProfilePageFriend friends={user.friends} />}
+                />
+                <Route path="/photo" element={<ProfilePagePhoto />} />
+              </Routes>
+            </div>
           </div>
-        </div>
+        </>
       )}
       {isDisplayProfileEdit && (
         <>
