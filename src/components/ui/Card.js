@@ -7,6 +7,7 @@ const Card = React.forwardRef((props, ref) => {
     <div
       ref={ref}
       className={`${styles.card} ${props.className ? props.className : ""}`}
+      onClick={props.onClick}
     >
       {props.children}
     </div>

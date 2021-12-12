@@ -63,10 +63,7 @@ export default function CommentInput(props) {
   return (
     <div className={styles["comment__input"]}>
       <div className={styles.avatar}>
-        <img
-          src="https://images.unsplash.com/photo-1638385583493-484240554d5e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw4M3x8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
-          alt="avatar"
-        />
+        <img src={context.avatar} alt={context.fullName} />
       </div>
       <div className={styles["comment__input-container"]}>
         <input

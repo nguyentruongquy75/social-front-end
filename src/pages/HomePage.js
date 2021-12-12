@@ -26,8 +26,6 @@ export default function HomePage() {
       const response = await fetch(`${API}user/${context.id}/newsfeed`);
       const newsfeed = await response.json();
       setNewsfeed(newsfeed);
-
-      console.log(newsfeed);
     } catch (err) {
       console.log(err);
     } finally {
@@ -44,7 +42,7 @@ export default function HomePage() {
 
       <div>
         <PostCreate onChange={changeNewsfeed} />
-        <PostList status={status} list={newsfeed} />
+        <PostList onChange={changeNewsfeed} status={status} list={newsfeed} />
       </div>
 
       <aside>

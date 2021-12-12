@@ -12,6 +12,9 @@ export default function PostComment(props) {
 
   const [status, setStatus] = useState("initial");
   const [comments, setComments] = useState([]);
+  const [hasChange, setHasChange] = useState(false);
+
+  const changeComment = () => setHasChange((prev) => !prev);
 
   useEffect(async () => {
     setStatus("loading");
@@ -25,7 +28,7 @@ export default function PostComment(props) {
     } finally {
       setStatus("finished");
     }
-  }, []);
+  }, [hasChange]);
 
   return (
     <div className={styles["post__comment"]}>
@@ -37,7 +40,12 @@ export default function PostComment(props) {
           </div>
         )}
         {comments.map((comment) => (
-          <Comment reply={comment.reply} key={comment._id} comment={comment} />
+          <Comment
+            onCommentChange={changeComment}
+            reply={comment.reply}
+            key={comment._id}
+            comment={comment}
+          />
         ))}
       </div>
     </div>

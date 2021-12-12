@@ -2,8 +2,37 @@ import React from "react";
 
 import styles from "./Notification.module.css";
 
+import reactions from "../../reactions";
+
 export default function Notification(props) {
   const notification = props.notification;
+  console.log(notification);
+
+  const duration = Date.now() - new Date(notification.createAt);
+
+  const convertDurationToString = (duration) => {
+    const seconds = duration / 1000;
+    const minutes = seconds / 60;
+
+    if (seconds < 60) {
+      return "Vừa xong";
+    }
+
+    if (minutes < 60) {
+      return `${Math.floor(minutes)} phút trước`;
+    }
+    const hours = minutes / 60;
+    if (hours < 24) {
+      return `${Math.floor(hours)} giờ trước`;
+    }
+
+    const days = hours / 24;
+
+    return `${Math.floor(days)} ngày trước`;
+  };
+
+  const durationText = convertDurationToString(duration);
+
   return (
     <div
       className={`${styles.notification} ${
@@ -11,14 +40,42 @@ export default function Notification(props) {
       } ${props.className ? props.className : ""}`}
     >
       <div className={styles["notification__img"]}>
-        <img
-          src="https://images.unsplash.com/photo-1638624269877-1f8b55da3e71?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxMnx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
-          alt=""
-        />
+        <img src={notification.user.avatar} alt={notification.user.fullName} />
+        <div
+          className={`${styles["notification__type"]} ${
+            styles["notification__type--" + notification.type]
+          }`}
+        >
+          {notification.type === "comment" && (
+            <i className="fas fa-comment-alt"></i>
+          )}
+
+          {notification.type === "reaction" && (
+            <img
+              src={
+                reactions.find(
+                  (item) => item.type === notification.reaction.type
+                ).icon
+              }
+            />
+          )}
+        </div>
       </div>
       <div className={styles["notification__info"]}>
-        <p className={styles["notification__title"]}>{notification.title}</p>
-        <span className={styles["notification__time"]}>1 phút trước</span>
+        <p className={styles["notification__title"]}>
+          <strong>{notification.user.fullName}</strong>
+          {notification.title.includes("và") && " và "}
+          {notification.title.includes("và") && (
+            <strong>
+              {notification.title.slice(
+                notification.title.indexOf("và") + 2,
+                notification.title.indexOf("khác") + 4
+              )}
+            </strong>
+          )}
+          {notification.title.slice(notification.title.indexOf("khác") + 4)}
+        </p>
+        <span className={styles["notification__time"]}>{durationText}</span>
       </div>
     </div>
   );

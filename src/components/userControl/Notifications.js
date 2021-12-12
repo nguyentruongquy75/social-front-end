@@ -79,6 +79,7 @@ export default function Notifications(props) {
   // socket notification
 
   socket.on(context.id, (data) => {
+    console.log(data);
     changeNotification();
     setPopupNotification(data);
   });
@@ -111,9 +112,14 @@ export default function Notifications(props) {
           <div className={styles["notifications__top"]}>
             <h3>Thông báo</h3>
           </div>
-          {notifiactions.map((noti) => (
-            <Notification key={noti._id} notification={noti} />
-          ))}
+          <div>
+            {notifiactions.length === 0 && (
+              <div className={styles["message"]}>Chưa có thông báo</div>
+            )}
+            {notifiactions.map((noti) => (
+              <Notification key={noti._id} notification={noti} />
+            ))}
+          </div>
         </Card>
       )}
       {popupNotification && (

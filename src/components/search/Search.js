@@ -50,36 +50,42 @@ export default function Search() {
           <i className="fas fa-search"></i>
         </Button>
 
-        <div
-          onMouseDown={resultClickHandler}
-          className={styles["search__result"]}
-        >
-          <ul>
-            {status === "loading" && (
-              <div className={styles.loading}>
-                <Spinner />
-              </div>
-            )}
+        {status !== "initial" && (
+          <div
+            onMouseDown={resultClickHandler}
+            className={styles["search__result"]}
+          >
+            <ul>
+              {status === "loading" && (
+                <div className={styles.loading}>
+                  <Spinner />
+                </div>
+              )}
 
-            {status === "finished" &&
-              result.slice(0, 5).map((item) => (
-                <li key={item._id}>
-                  <Link
-                    className={styles["search__result-item"]}
-                    to={`/${item._id}/profile/`}
-                  >
-                    <div className={styles["search__result-item__img"]}>
-                      <img src={item.avatar} alt={item.fullName} />
-                    </div>
+              {status === "finished" && result.length === 0 && (
+                <div className={styles["message"]}>Không có kết quả nào</div>
+              )}
 
-                    <div className={styles["search__result-item__info"]}>
-                      <h4>{item.fullName}</h4>
-                    </div>
-                  </Link>
-                </li>
-              ))}
-          </ul>
-        </div>
+              {status === "finished" &&
+                result.slice(0, 5).map((item) => (
+                  <li key={item._id}>
+                    <Link
+                      className={styles["search__result-item"]}
+                      to={`/${item._id}/profile/`}
+                    >
+                      <div className={styles["search__result-item__img"]}>
+                        <img src={item.avatar} alt={item.fullName} />
+                      </div>
+
+                      <div className={styles["search__result-item__info"]}>
+                        <h4>{item.fullName}</h4>
+                      </div>
+                    </Link>
+                  </li>
+                ))}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );

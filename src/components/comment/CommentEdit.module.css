@@ -1,0 +1,31 @@
+.comment__edit textarea {
+  min-width: 20rem;
+  min-height: 10rem;
+  padding: 1rem;
+  resize: none;
+  border-radius: 0.6rem;
+}
+
+.comment__edit-action {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1.2rem;
+
+  margin-top: 0.8rem;
+}
+
+.button {
+  padding: 0.8rem;
+  background-color: var(--color-white);
+  border-radius: 0.6rem;
+}
+
+.button--blue {
+  background-color: var(--color-blue);
+  color: var(--color-white);
+}
+
+.button:disabled {
+  background-color: var(--color-white);
+  color: #333;
+}

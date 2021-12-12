@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 
 import styles from "./Comment.module.css";
 
@@ -9,11 +9,15 @@ import userContext from "../../context/userCtx";
 import { API_comments } from "../../config";
 import Reply from "./Reply";
 import Spinner from "../spinner/Spinner";
+import Card from "../ui/Card";
+import Button from "../ui/Button";
+import CommentEdit from "./CommentEdit";
 
 function Comment(props) {
   const context = useContext(userContext);
   const comment = props.comment;
   const fullName = `${comment.user.lastName} ${comment.user.firstName}`;
+  const commentSettingModalRef = useRef();
 
   const [isDisplayReplyInput, setIsDisplayReplyInput] = useState(false);
   const [isDisplayReplyComments, setIsDisplayreplyComments] = useState(false);
@@ -21,6 +25,9 @@ function Comment(props) {
   const [commentReactions, setCommentReactions] = useState(comment.reactions);
   const [reply, setReply] = useState([]);
   const [status, setStatus] = useState("initial");
+  const [isDisplayCommentSetting, setIsDisplayCommentSetting] = useState(false);
+  const [isRemoveComment, setIsRemoveComment] = useState(false);
+  const [isDisplayCommentEdit, setIsDisplayCommentEdit] = useState(false);
 
   // Reaction
   const authReaction = commentReactions.find(
@@ -75,6 +82,33 @@ function Comment(props) {
     setIsDisplayReactionHover(false);
   };
 
+  // comment setting
+  const toggleDisplayCommentSetting = () =>
+    setIsDisplayCommentSetting((isDisplay) => !isDisplay);
+
+  const hideCommentSetting = () => setIsDisplayCommentSetting(false);
+
+  const clickOutCommentModalHandler = (e) => {
+    if (
+      commentSettingModalRef.current &&
+      !commentSettingModalRef.current.contains(e.target)
+    ) {
+      hideCommentSetting();
+    }
+  };
+
+  // event click out modal
+  useEffect(() => {
+    document.addEventListener("mousedown", clickOutCommentModalHandler);
+    return () => {
+      document.addEventListener("mousedown", clickOutCommentModalHandler);
+    };
+  });
+
+  // remove comment
+
+  const removeComment = () => setIsRemoveComment(true);
+
   const twoMostReactions = getTwoMostReactions(commentReactions);
 
   useEffect(() => {
@@ -86,6 +120,14 @@ function Comment(props) {
       clearTimeout(id);
     };
   }, [isDisplayReactionHover]);
+
+  // edit comment
+  const displayCommentEdit = () => {
+    setIsDisplayCommentEdit(true);
+    hideCommentSetting();
+  };
+
+  const hideCommentEdit = () => setIsDisplayCommentEdit(false);
 
   // send request update reaction of comment
   useEffect(async () => {
@@ -146,6 +188,7 @@ function Comment(props) {
     }
   }, [reaction]);
 
+  // get reply
   useEffect(async () => {
     if (isDisplayReplyComments) {
       setStatus("loading");
@@ -156,19 +199,46 @@ function Comment(props) {
     }
   }, [isDisplayReplyComments]);
 
+  // remove comment
+  useEffect(async () => {
+    if (isRemoveComment) {
+      try {
+        const response = await fetch(`${API_comments}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            _id: comment._id,
+          }),
+        });
+
+        props.onCommentChange();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, [isRemoveComment]);
+
   return (
     <div className={styles["comment"]}>
       <div className={styles["comment__avatar"]}>
-        <img
-          src="https://images.unsplash.com/photo-1638482856830-16b0e15fcf2c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzNnx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
-          alt=""
-        />
+        <img src={comment.user.avatar} alt={comment.user.fullName} />
       </div>
 
       <div className={styles["comment__info-container"]}>
         <div className={styles["comment__info"]}>
           <h6>{fullName}</h6>
-          <p>{comment.message}</p>
+          {isDisplayCommentEdit && (
+            <CommentEdit
+              message={comment.message}
+              onClose={hideCommentEdit}
+              commentId={comment._id}
+              onCommentChange={props.onCommentChange}
+            />
+          )}
+
+          {!isDisplayCommentEdit && <p>{comment.message}</p>}
 
           {commentReactions.length > 0 && (
             <div className={styles["comment__reaction"]}>
@@ -186,6 +256,25 @@ function Comment(props) {
               <span>{commentReactions.length}</span>
             </div>
           )}
+
+          <div
+            onClick={toggleDisplayCommentSetting}
+            className={styles["comment__setting"]}
+          >
+            <i className="fas fa-ellipsis-h"></i>
+            {isDisplayCommentSetting && (
+              <Card
+                onClick={(e) => e.stopPropagation()}
+                className={styles["comment__setting-modal"]}
+                ref={commentSettingModalRef}
+              >
+                <ul>
+                  <li onClick={displayCommentEdit}>Chỉnh sửa</li>
+                  <li onClick={removeComment}>Xoá</li>
+                </ul>
+              </Card>
+            )}
+          </div>
         </div>
         <div className={styles["comment__action"]}>
           <div

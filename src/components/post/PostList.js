@@ -17,7 +17,9 @@ export default function PostList(props) {
       )}
       {props.status === "finished" &&
         props.list.length > 0 &&
-        props.list.map((post) => <Post key={post._id} post={post} />)}
+        props.list.map((post) => (
+          <Post onChange={props.onChange} key={post._id} post={post} />
+        ))}
     </>
   );
 }

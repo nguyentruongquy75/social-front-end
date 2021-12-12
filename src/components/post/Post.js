@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Card from "../ui/Card";
 
 import styles from "./Post.module.css";
@@ -10,18 +10,21 @@ import PostAction from "./PostAction";
 
 import reactionsIcon from "../../reactions";
 import PostComment from "./PostComment";
+import { API_post } from "../../config";
 
 export default function Post(props) {
-  const postId = props.post._id;
-  const title = props.post.title;
-  const images = props.post.image;
-  const user = props.post.user;
+  const post = props.post;
   const publishedAt = new Date(props.post.publishedAt);
   const comments = props.post.comments;
-  const fullName = `${user.lastName} ${user.firstName}`;
 
   const [reactions, setReactions] = useState(props.post.reactions);
   const [isDisplayComment, setIsDisplayComment] = useState(false);
+  const [fetchReaction, setFetchReaction] = useState(false);
+  const [reactionInformation, setReactionInformation] = useState({
+    isDisplay: false,
+    type: "",
+    reactions: [],
+  });
 
   const duration = Date.now() - publishedAt;
 
@@ -47,15 +50,14 @@ export default function Post(props) {
   };
 
   const getTwoMostReactions = (reactions) => {
-    const uniqueReaction = new Set(reactions);
-
+    const uniqueReaction = new Set(reactions.map((item) => item.type));
     const result = Array.from(uniqueReaction).map((reaction) => {
       const reactionCount = reactions.filter(
-        (item) => item.type === reaction.type
+        (item) => item.type === reaction
       ).length;
 
       return {
-        type: reaction.type,
+        type: reaction,
         count: reactionCount,
       };
     });
@@ -67,32 +69,100 @@ export default function Post(props) {
     setIsDisplayComment(true);
   };
 
+  // reaction information
+  const displayReactionInformation = () =>
+    setReactionInformation((reactionInformation) => ({
+      ...reactionInformation,
+      isDisplay: true,
+    }));
+
+  const hideReactionInformation = () =>
+    setReactionInformation((reactionInformation) => ({
+      ...reactionInformation,
+      isDisplay: false,
+    }));
+
+  const setTypeReactionInformation = (type) =>
+    setReactionInformation((reactionInformation) => ({
+      ...reactionInformation,
+      type,
+    }));
+  const setReactionsInformation = (reactions) =>
+    setReactionInformation((reactionInformation) => ({
+      ...reactionInformation,
+      reactions,
+    }));
+
   const twoMostReactions = getTwoMostReactions(reactions);
+
+  // event mouse up reaction
+  const hoverReaction = (e) => {
+    setFetchReaction(true);
+    displayReactionInformation();
+    setTypeReactionInformation(e.target.dataset.type);
+  };
+
+  // event mouse out reaction
+  const mouseOutReaction = (e) => {
+    hideReactionInformation();
+  };
+
+  // fetch reactions
+  useEffect(async () => {
+    if (fetchReaction) {
+      try {
+        const response = await fetch(`${API_post}/${post._id}/reactions`);
+        const reactions = await response.json();
+
+        setReactions(reactions);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, [fetchReaction]);
+
+  // change type reaction
+  useEffect(() => {
+    if (reactionInformation.type !== "") {
+      let reactionList = reactions;
+      if (reactionInformation.type !== "all") {
+        reactionList = reactions.filter(
+          (item) => item.type === reactionInformation.type
+        );
+      }
+
+      setReactionsInformation(reactionList);
+    }
+  }, [reactions, reactionInformation.type]);
 
   return (
     <Card className={styles.card}>
       <div className={styles["post__top"]}>
         <div className={styles.user}>
           <div className={styles["user__img"]}>
-            <img src={user.avatar} alt={fullName} />
+            <img src={post.user.avatar} alt={post.user.fullName} />
           </div>
           <div>
-            <h6 className={styles["user__name"]}>{fullName}</h6>
+            <h6 className={styles["user__name"]}>{post.user.fullName}</h6>
             <span className={styles["published-at"]}>
               {convertDurationToString(duration)}
             </span>
           </div>
         </div>
 
-        <PostSetting />
+        <PostSetting
+          onChange={props.onChange}
+          user={post.user}
+          postId={post._id}
+        />
       </div>
 
       <div className={styles["post__content"]}>
-        <p>{title}</p>
+        <p>{post.title}</p>
       </div>
       <div className={styles["post__img"]}>
         <GridImage
-          images={images || []}
+          images={post.image || []}
           countFrom={3}
           renderOverlay={() => ""}
           overlayBackgroundColor={"#0000"}
@@ -110,14 +180,47 @@ export default function Post(props) {
                     (item) => item.type === reaction.type
                   ).icon;
 
-                  return <img key={reaction.type} src={reactionIcon} />;
+                  return (
+                    <img
+                      onMouseOver={hoverReaction}
+                      onMouseOut={mouseOutReaction}
+                      data-type={reaction.type}
+                      key={reaction.type}
+                      src={reactionIcon}
+                    />
+                  );
                 })}
               </div>
             )}
             {reactions.length > 0 && (
-              <span className={styles["post__reactions-text"]}>
+              <span
+                data-type="all"
+                onMouseOver={hoverReaction}
+                onMouseOut={mouseOutReaction}
+                className={styles["post__reactions-text"]}
+              >
                 {reactions.length}
               </span>
+            )}
+            {reactionInformation.isDisplay && (
+              <Card className={styles["post__reactions-infomation"]}>
+                <h4>
+                  {reactionInformation.type !== "all"
+                    ? reactionInformation.type
+                    : null}
+                </h4>
+                <ul>
+                  {reactionInformation.reactions.slice(0, 10).map((item) => (
+                    <li key={item.user._id}>{item.user.fullName}</li>
+                  ))}
+                  {reactionInformation.reactions.length > 10 && (
+                    <li>
+                      và {reactionInformation.reactions.length - 10} người khác
+                      ...
+                    </li>
+                  )}
+                </ul>
+              </Card>
             )}
           </div>
           <div className={styles["post__info-right"]}>
@@ -129,12 +232,12 @@ export default function Post(props) {
         <PostAction
           setReactions={setReactions}
           reactions={reactions}
-          postId={postId}
+          postId={post._id}
           onComment={displayComment}
         />
       </div>
 
-      {isDisplayComment && <PostComment postId={postId} />}
+      {isDisplayComment && <PostComment postId={post._id} />}
     </Card>
   );
 }
