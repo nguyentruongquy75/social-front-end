@@ -156,6 +156,15 @@ export default function Post(props) {
     }
   }, [reactions, reactionInformation.type]);
 
+  // css for display reaction statistic
+  useEffect(() => {
+    if (isDisplayReactionStatistic) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = null;
+    }
+  }, [isDisplayReactionStatistic]);
+
   return (
     <>
       <Card className={styles.card}>

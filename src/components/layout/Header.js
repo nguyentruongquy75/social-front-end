@@ -5,7 +5,6 @@ import Search from "../search/Search";
 import HeaderGroup from "./HeaderGroup";
 import UserControl from "../userControl/UserControl";
 import Wrapper from "./Wrapper";
-import Avatar from "../avatar/Avatar";
 
 import styles from "./Header.module.css";
 
@@ -19,7 +18,6 @@ export default function Header() {
         </HeaderGroup>
         <HeaderGroup className={styles["header__group"]}>
           <UserControl />
-          <Avatar />
         </HeaderGroup>
       </Wrapper>
     </header>

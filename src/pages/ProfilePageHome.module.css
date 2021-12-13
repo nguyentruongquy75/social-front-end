@@ -13,3 +13,12 @@
 
   height: 10rem;
 }
+
+.message {
+  margin-top: 3.2rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+}

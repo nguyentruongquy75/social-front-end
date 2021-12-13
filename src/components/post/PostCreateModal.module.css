@@ -122,6 +122,7 @@
 
 .image-preview {
   position: relative;
+  overflow: hidden;
 }
 
 .image-preview img {

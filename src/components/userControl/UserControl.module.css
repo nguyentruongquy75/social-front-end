@@ -25,7 +25,7 @@
   cursor: pointer;
 }
 
-.user-control li + li {
+.user-control li ~ li {
   margin-left: 2rem;
 }
 

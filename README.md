@@ -34,7 +34,9 @@
 
 - Add post route
 
-- Add search route
+- Add search
+
+### Responsive
 
 ## Backend
 

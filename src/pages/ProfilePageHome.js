@@ -47,6 +47,11 @@ export default function ProfilePageHome(props) {
         )}
 
         <div>
+          {status === "finished" && posts.length === 0 && (
+            <div className={styles["message"]}>
+              <span>Chưa có bài viết nào</span>
+            </div>
+          )}
           {status === "finished" &&
             posts.map((post) => <Post key={post._id} post={post} />)}
         </div>

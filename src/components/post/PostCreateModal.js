@@ -52,8 +52,6 @@ export default function PostCreateModal(props) {
     setImagePreview(null);
   };
 
-  console.log(imagePreview);
-
   return (
     <Card className={styles.modal}>
       {status === "loading" && (
