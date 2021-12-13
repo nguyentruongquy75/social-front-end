@@ -92,27 +92,6 @@
   cursor: pointer;
 }
 
-.post__reactions-infomation {
-  position: absolute;
-  top: calc(100% + 0.4rem);
-  left: 0;
-
-  width: max-content;
-  padding: 1rem;
-  background: rgba(0, 0, 0, 0.6);
-  color: var(--color-gray-light);
-}
-
-.post__reactions-infomation h4 {
-  font-size: 1.7rem;
-  margin: 0 0 0.4rem;
-}
-
-.post__reactions-infomation li {
-  font-size: 1.3rem;
-  margin-top: 0.2rem;
-}
-
 .post__info-right {
   transform: translateY(3px);
 }

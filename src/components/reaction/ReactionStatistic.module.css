@@ -1,0 +1,146 @@
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 1000;
+
+  transform: translate(-50%, -50%);
+  background-color: var(--color-white);
+
+  width: 54rem;
+  max-width: 100%;
+}
+
+.modal__top {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.modal__nav {
+  padding: 0 1.8rem;
+}
+
+.modal__nav ul {
+  margin: 0;
+
+  display: flex;
+}
+
+.modal__nav li {
+  display: flex;
+  align-items: center;
+  height: 6rem;
+  line-height: 6rem;
+  padding: 0 1.6rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #65676b;
+}
+
+.modal__nav li.active--all,
+.modal__nav li.active--Like {
+  color: var(--color-blue);
+  border-bottom: 2px solid var(--color-blue);
+}
+
+.modal__nav li.active--Love {
+  border-bottom: 2px solid #f33e58;
+  color: #f33e58;
+}
+
+.modal__nav li.active--Care,
+.modal__nav li.active--Haha,
+.modal__nav li.active--Wow,
+.modal__nav li.active--Sad {
+  border-bottom: 2px solid #f7b125;
+  color: #f7b125;
+}
+
+.modal__nav li.active--Angry {
+  border-bottom: 2px solid #e9710f;
+  color: #e9710f;
+}
+
+.modal__nav li:hover {
+  cursor: pointer;
+  background-color: var(--color-gray-light);
+}
+
+.modal__nav img {
+  --size: 2rem;
+  width: var(--size);
+  height: var(--size);
+  object-fit: cover;
+  margin-right: 0.4rem;
+}
+
+.modal__close {
+  --size: 3.6rem;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: var(--color-gray-dark);
+
+  font-size: 2.2rem;
+  cursor: pointer;
+
+  position: absolute;
+  top: 1.2rem;
+  right: 1.2rem;
+  color: #65676b;
+}
+
+.reaction__list {
+  padding: 0.8rem;
+  height: 36rem;
+}
+
+.reaction__item {
+  display: flex;
+  align-items: center;
+
+  padding: 0.8rem;
+}
+
+.reaction__image {
+  --size: 3.8rem;
+  height: var(--size);
+  width: var(--size);
+  margin-right: 1.4rem;
+}
+
+.reaction__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.reaction__name {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #050505;
+}
+
+.reaction__name:hover {
+  color: #050505;
+}
+
+.reaction__action {
+  margin-left: auto;
+}
+
+.reaction__action button {
+  height: 3.6rem;
+  padding: 0 1.2rem;
+  border-radius: 0.6rem;
+  font-weight: 500;
+}
+
+.reaction__action button i {
+  margin-right: 0.6rem;
+}
