@@ -1,4 +1,5 @@
 import React from "react";
+import Spinner from "../spinner/Spinner";
 
 import Card from "../ui/Card";
 
@@ -13,6 +14,11 @@ export default function ReactionInformation(props) {
           : null}
       </h4>
       <ul>
+        {props.reactionInformation.status === "loading" && (
+          <div className={styles["loading"]}>
+            <Spinner />
+          </div>
+        )}
         {props.reactionInformation.reactions.slice(0, 10).map((item) => (
           <li key={item._id}>{item.user.fullName}</li>
         ))}

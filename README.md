@@ -26,7 +26,7 @@
 
 - Post Action: Add remove action, coppy link [remove]
 
-- Post reaction: information, statistic [information]
+- Post reaction: information, statistic [80%, UX]
 
 - Comment Action: add remove comment action, edit [ok 80%]
 
@@ -38,7 +38,7 @@
 
 ## Backend
 
-- Strorage images for create post route
+- Strorage images for create post route [ok]
 
 - Update , add some field to Notification schema [ok]
 

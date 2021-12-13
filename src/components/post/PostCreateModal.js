@@ -2,6 +2,8 @@ import React, { useContext, useRef, useState } from "react";
 import Button from "../ui/Button";
 import Card from "../ui/Card";
 
+import GridImage from "react-fb-image-grid";
+
 import userContext from "../../context/userCtx";
 
 import styles from "./PostCreateModal.module.css";
@@ -12,7 +14,7 @@ export default function PostCreateModal(props) {
 
   const [status, setStatus] = useState("initial");
   const [isAddPhoto, setIsAddPhoto] = useState(false);
-  const [imagePreview, setImagePreview] = useState(null);
+  const [imagePreview, setImagePreview] = useState([]);
   const addPhoto = () => setIsAddPhoto(true);
   const removePhoto = () => setIsAddPhoto(false);
 
@@ -23,7 +25,7 @@ export default function PostCreateModal(props) {
     const formData = new FormData();
     formData.append("title", textRef.current.value);
     formData.append("user", context.id);
-    formData.append("image", imagePreview ? imagePreview[0] : "");
+    imagePreview.forEach((image) => formData.append("image", image));
 
     try {
       setStatus("loading");
@@ -43,12 +45,14 @@ export default function PostCreateModal(props) {
   };
 
   const fileUpload = (e) => {
-    setImagePreview(e.target.files);
+    setImagePreview((prev) => [...prev, ...Object.values(e.target.files)]);
   };
 
   const removeFileUpload = () => {
     setImagePreview(null);
   };
+
+  console.log(imagePreview);
 
   return (
     <Card className={styles.modal}>
@@ -87,7 +91,12 @@ export default function PostCreateModal(props) {
                 <div className={styles["close"]} onClick={removeFileUpload}>
                   <i className="fas fa-times"></i>
                 </div>
-                <img src={URL.createObjectURL(imagePreview[0])} />
+                <GridImage
+                  images={imagePreview.map((item) => URL.createObjectURL(item))}
+                  countFrom={3}
+                  renderOverlay={() => ""}
+                  overlayBackgroundColor={"#0000"}
+                />
               </div>
             )}
 
@@ -107,6 +116,7 @@ export default function PostCreateModal(props) {
                   accept="image/*"
                   type="file"
                   id="fileUpload"
+                  multiple
                 />
               </div>
             )}

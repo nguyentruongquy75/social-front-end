@@ -22,3 +22,8 @@
   font-size: 1.3rem;
   margin-top: 0.2rem;
 }
+
+.loading {
+  display: flex;
+  justify-content: center;
+}

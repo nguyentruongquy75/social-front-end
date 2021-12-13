@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Card from "../ui/Card";
 
 import styles from "./Post.module.css";
@@ -14,17 +15,20 @@ import { API_post } from "../../config";
 import ReactionInformation from "../reaction/ReactionInformation";
 import ReactionStatistic from "../reaction/ReactionStatistic";
 import Overlay from "../overlay/Overlay";
+import userContext from "../../context/userCtx";
 
 export default function Post(props) {
   const post = props.post;
   const publishedAt = new Date(props.post.publishedAt);
   const comments = props.post.comments;
+  const context = useContext(userContext);
 
   const [reactions, setReactions] = useState(props.post.reactions);
   const [isDisplayComment, setIsDisplayComment] = useState(false);
   const [fetchReaction, setFetchReaction] = useState(false);
   const [reactionInformation, setReactionInformation] = useState({
     isDisplay: false,
+    status: "initial",
     type: "",
     reactions: [],
   });
@@ -92,6 +96,11 @@ export default function Post(props) {
       ...reactionInformation,
       type,
     }));
+  const setStatusReactionInformation = (status) =>
+    setReactionInformation((reactionInformation) => ({
+      ...reactionInformation,
+      status,
+    }));
   const setReactionsInformation = (reactions) =>
     setReactionInformation((reactionInformation) => ({
       ...reactionInformation,
@@ -120,12 +129,15 @@ export default function Post(props) {
   useEffect(async () => {
     if (fetchReaction) {
       try {
+        setStatusReactionInformation("loading");
         const response = await fetch(`${API_post}/${post._id}/reactions`);
         const reactions = await response.json();
 
         setReactions(reactions);
       } catch (error) {
         console.log(error);
+      } finally {
+        setStatusReactionInformation("finished");
       }
     }
   }, [fetchReaction]);
@@ -150,10 +162,26 @@ export default function Post(props) {
         <div className={styles["post__top"]}>
           <div className={styles.user}>
             <div className={styles["user__img"]}>
-              <img src={post.user.avatar} alt={post.user.fullName} />
+              <Link
+                to={
+                  context.id === post.user._id
+                    ? "/profile/"
+                    : `/${post.user._id}/profile/`
+                }
+              >
+                <img src={post.user.avatar} alt={post.user.fullName} />
+              </Link>
             </div>
             <div>
-              <h6 className={styles["user__name"]}>{post.user.fullName}</h6>
+              <Link
+                to={
+                  context.id === post.user._id
+                    ? "/profile/"
+                    : `/${post.user._id}/profile/`
+                }
+              >
+                <h6 className={styles["user__name"]}>{post.user.fullName}</h6>
+              </Link>
               <span className={styles["published-at"]}>
                 {convertDurationToString(duration)}
               </span>
