@@ -7,13 +7,17 @@ import styles from "./PostAction.module.css";
 import reactionsIcon from "../../reactions";
 import userContext from "../../context/userCtx";
 import { API_post } from "../../config";
+import { useDispatch } from "react-redux";
+import { changePostReaction } from "../../redux/updateSlice";
 
 export default function PostAction(props) {
   const context = useContext(userContext);
   const reactions = props.reactions;
+  const dispatch = useDispatch();
+  const changePostReactions = () => dispatch(changePostReaction());
 
   const authReaction = reactions.find(
-    (reaction) => reaction.user === context.id
+    (reaction) => reaction.user._id === context.id
   );
 
   const initialReaction = authReaction
@@ -41,6 +45,16 @@ export default function PostAction(props) {
     }
   };
 
+  // initial reaction
+  useEffect(() => {
+    setReaction(
+      authReaction
+        ? reactionsIcon.find((reaction) => reaction.type === authReaction.type)
+        : null
+    );
+  }, [reactions]);
+
+  // add reaction
   useEffect(async () => {
     if (reaction !== initialReaction) {
       // Add and update reaction
@@ -66,13 +80,6 @@ export default function PostAction(props) {
             }
           );
           const savedReaction = await response.json();
-
-          // set reaction
-
-          props.setReactions((prev) => [
-            ...prev.filter((item) => item._id !== savedReaction._id),
-            savedReaction,
-          ]);
         } catch (error) {
           console.log(error);
         }
@@ -88,14 +95,12 @@ export default function PostAction(props) {
           }),
         });
         const deletedReaction = await response.json();
-
-        props.setReactions((prev) => [
-          ...prev.filter((item) => item._id !== deletedReaction._id),
-        ]);
       }
+      changePostReactions();
     }
   }, [reaction]);
 
+  // Hover
   useEffect(() => {
     if (!isDisplayReactionHover) {
       const id = setTimeout(() => {

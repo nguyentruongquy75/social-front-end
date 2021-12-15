@@ -11,14 +11,16 @@ import Request from "../components/request/Request";
 import styles from "./HomePage.module.css";
 import { API } from "../config";
 import userContext from "../context/userCtx";
+import { useSelector } from "react-redux";
 
 export default function HomePage() {
   const context = useContext(userContext);
   const [status, setStatus] = useState("initial");
   const [newsfeed, setNewsfeed] = useState([]);
-  const [isNewsfeedChange, setIsNewsfeedChange] = useState(false);
 
-  const changeNewsfeed = () => setIsNewsfeedChange((state) => !state);
+  const hasChangeNewsfeed = useSelector(
+    (state) => state.update.hasChangeNewsfeed
+  );
 
   useEffect(async () => {
     try {
@@ -31,7 +33,7 @@ export default function HomePage() {
     } finally {
       setStatus("finished");
     }
-  }, [context, isNewsfeedChange]);
+  }, [context, hasChangeNewsfeed]);
 
   return (
     <Wrapper className={styles.wrapper}>
@@ -41,8 +43,8 @@ export default function HomePage() {
       </aside>
 
       <div>
-        <PostCreate onChange={changeNewsfeed} />
-        <PostList onChange={changeNewsfeed} status={status} list={newsfeed} />
+        <PostCreate />
+        <PostList status={status} list={newsfeed} />
       </div>
 
       <aside>

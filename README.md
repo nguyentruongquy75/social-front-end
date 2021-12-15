@@ -2,10 +2,6 @@
 
 ## Frontend
 
-- Add some informataion for user [ok]
-
-- Add update avatar of user [ok]
-
 - Improve UX
 
 ## Backend
@@ -18,30 +14,36 @@
 
 ## Front end
 
-- Search: No result message, UX [80%]
+- fix when see reaction information and reaction statistic after add reaction to post [ok]
 
-- PostCreateModal: loading UX [ok]
+- Add loading when add comment [ok]
 
-- Notifications : No result message [ok], link to notification itself, add type for notification item [ok]
+- Add loading when remove comment [ok]
 
-- Post Action: Add remove action, coppy link [remove]
+- Add loading when wait for edit comment [ok]
 
-- Post reaction: information, statistic [80%, UX]
+- Add edit post action for author [ok]
 
-- Comment Action: add remove comment action, edit [ok 80%]
+- Authorization comment action [edit, remove] [ok]
+
+- Fix notification
 
 - Update reactions, comments post [best]
 
-- Add post route
+- Add post route [ok]
 
-- Add search
+- Fix profile route
+
+- Add createAt for comment
 
 ### Responsive
 
 ## Backend
 
-- Strorage images for create post route [ok]
-
-- Update , add some field to Notification schema [ok]
-
 - Handle remove notification
+
+- Add createAt for Comment schema
+
+- Add chat [best]
+
+- Fix newsfeed

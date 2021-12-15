@@ -17,15 +17,23 @@ import ReactionStatistic from "../reaction/ReactionStatistic";
 import Overlay from "../overlay/Overlay";
 import userContext from "../../context/userCtx";
 
+import { useSelector } from "react-redux";
+
 export default function Post(props) {
   const post = props.post;
   const publishedAt = new Date(props.post.publishedAt);
   const comments = props.post.comments;
   const context = useContext(userContext);
 
-  const [reactions, setReactions] = useState(props.post.reactions);
-  const [isDisplayComment, setIsDisplayComment] = useState(false);
-  const [fetchReaction, setFetchReaction] = useState(false);
+  // get change reaction from redux
+  const hasChangePostReaction = useSelector(
+    (state) => state.update.hasChangePostReaction
+  );
+
+  const [reactions, setReactions] = useState([]);
+  const [isDisplayComment, setIsDisplayComment] = useState(
+    props.isDisplayComment || false
+  );
   const [reactionInformation, setReactionInformation] = useState({
     isDisplay: false,
     status: "initial",
@@ -111,7 +119,6 @@ export default function Post(props) {
 
   // event mouse up reaction
   const hoverReaction = (e) => {
-    setFetchReaction(true);
     displayReactionInformation();
     setTypeReactionInformation(e.target.dataset.type);
   };
@@ -127,20 +134,17 @@ export default function Post(props) {
 
   // fetch reactions
   useEffect(async () => {
-    if (fetchReaction) {
-      try {
-        setStatusReactionInformation("loading");
-        const response = await fetch(`${API_post}/${post._id}/reactions`);
-        const reactions = await response.json();
-
-        setReactions(reactions);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setStatusReactionInformation("finished");
-      }
+    try {
+      setStatusReactionInformation("loading");
+      const response = await fetch(`${API_post}/${post._id}/reactions`);
+      const reactions = await response.json();
+      setReactions(reactions);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setStatusReactionInformation("finished");
     }
-  }, [fetchReaction]);
+  }, [hasChangePostReaction]);
 
   // change type reaction
   useEffect(() => {
@@ -167,7 +171,9 @@ export default function Post(props) {
 
   return (
     <>
-      <Card className={styles.card}>
+      <Card
+        className={`${styles.card} ${props.className ? props.className : ""}`}
+      >
         <div className={styles["post__top"]}>
           <div className={styles.user}>
             <div className={styles["user__img"]}>
@@ -197,11 +203,7 @@ export default function Post(props) {
             </div>
           </div>
 
-          <PostSetting
-            onChange={props.onChange}
-            user={post.user}
-            postId={post._id}
-          />
+          <PostSetting post={post} user={post.user} postId={post._id} />
         </div>
 
         <div className={styles["post__content"]}>
@@ -264,14 +266,15 @@ export default function Post(props) {
           </div>
 
           <PostAction
-            setReactions={setReactions}
             reactions={reactions}
             postId={post._id}
             onComment={displayComment}
           />
         </div>
 
-        {isDisplayComment && <PostComment postId={post._id} />}
+        {isDisplayComment && (
+          <PostComment postAuthId={post.user._id} postId={post._id} />
+        )}
       </Card>
       {isDisplayReactionStatistic && (
         <>

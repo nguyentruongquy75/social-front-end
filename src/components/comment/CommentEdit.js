@@ -23,6 +23,7 @@ export default function CommentEdit(props) {
   useEffect(async () => {
     if (isFormSubmit) {
       try {
+        props.changeStatusEditComment("loading");
         const response = await fetch(`${API_comments}`, {
           method: "PATCH",
           headers: {
@@ -39,6 +40,7 @@ export default function CommentEdit(props) {
       } finally {
         setIsFormSubmit(false);
         props.onClose();
+        props.changeStatusEditComment("finished");
       }
     }
   }, [isFormSubmit]);

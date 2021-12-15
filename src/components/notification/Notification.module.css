@@ -1,3 +1,10 @@
+.notification__link,
+.notification__link:hover,
+.notification__link:active {
+  color: inherit;
+  text-decoration: none;
+}
+
 .notification {
   display: flex;
   gap: 1.2rem;

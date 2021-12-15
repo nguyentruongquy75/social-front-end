@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useRef, useState, useEffect } from "react";
 import Button from "../ui/Button";
 import Card from "../ui/Card";
 
@@ -8,15 +8,22 @@ import userContext from "../../context/userCtx";
 
 import styles from "./PostCreateModal.module.css";
 import { API_post } from "../../config";
+import { useDispatch } from "react-redux";
+import { changeNewsfeed } from "../../redux/updateSlice";
 
 export default function PostCreateModal(props) {
   const context = useContext(userContext);
+  const dispatch = useDispatch();
 
   const [status, setStatus] = useState("initial");
   const [isAddPhoto, setIsAddPhoto] = useState(false);
-  const [imagePreview, setImagePreview] = useState([]);
+  const [imagePreview, setImagePreview] = useState(props.post.image || []);
+  const [title, setTitle] = useState(props.post.title || "");
+
   const addPhoto = () => setIsAddPhoto(true);
   const removePhoto = () => setIsAddPhoto(false);
+
+  const updateNewsfeed = () => dispatch(changeNewsfeed());
 
   const textRef = useRef();
 
@@ -26,17 +33,18 @@ export default function PostCreateModal(props) {
     formData.append("title", textRef.current.value);
     formData.append("user", context.id);
     imagePreview.forEach((image) => formData.append("image", image));
+    props.type === "edit" && formData.append("_id", props.post._id);
 
     try {
       setStatus("loading");
       const response = await fetch(API_post, {
-        method: "POST",
+        method: props.type === "edit" ? "PATCH" : "POST",
         body: formData,
       });
       const post = await response.json();
 
       props.onClose();
-      props.onChange();
+      updateNewsfeed();
     } catch (error) {
       console.log(error);
     } finally {
@@ -52,10 +60,32 @@ export default function PostCreateModal(props) {
     setImagePreview(null);
   };
 
+  // title change
+  const titleChangeHandler = (e) => setTitle(e.target.value);
+
+  // focus when display
+  useEffect(() => {
+    textRef.current.focus();
+    textRef.current.value.length > 0 &&
+      textRef.current.setSelectionRange(
+        textRef.current.value.length,
+        textRef.current.value.length
+      );
+  }, []);
+
+  // disable button
+  const buttonRef = useRef();
+  useEffect(() => {
+    buttonRef.current.disabled =
+      title === props.post.title && imagePreview === props.post.image;
+  }, [title, imagePreview]);
+
   return (
     <Card className={styles.modal}>
       {status === "loading" && (
-        <div className={styles["loading"]}>Đang đăng ...</div>
+        <div className={styles["loading"]}>
+          Đang {props.type === "edit" ? "lưu" : "đăng"} ...
+        </div>
       )}
       <form onSubmit={submitHandler}>
         <div className={styles["modal__top"]}>
@@ -82,6 +112,8 @@ export default function PostCreateModal(props) {
               ref={textRef}
               placeholder={`Bạn đang nghĩ gì ?`}
               name="content"
+              value={title}
+              onChange={titleChangeHandler}
             />
 
             {imagePreview && (
@@ -90,7 +122,12 @@ export default function PostCreateModal(props) {
                   <i className="fas fa-times"></i>
                 </div>
                 <GridImage
-                  images={imagePreview.map((item) => URL.createObjectURL(item))}
+                  images={imagePreview.map((item) => {
+                    if (typeof item !== "string") {
+                      return URL.createObjectURL(item);
+                    }
+                    return item;
+                  })}
                   countFrom={3}
                   renderOverlay={() => ""}
                   overlayBackgroundColor={"#0000"}
@@ -146,7 +183,9 @@ export default function PostCreateModal(props) {
           </div>
 
           <div className={styles["button"]}>
-            <button type="submit">Đăng</button>
+            <button ref={buttonRef} type="submit">
+              {props.type === "edit" ? "Lưu" : "Đăng"}
+            </button>
           </div>
         </div>
       </form>

@@ -35,6 +35,10 @@
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
+.setting__modal ul {
+  margin: 0;
+}
+
 .setting__modal li {
   font-size: 1.6rem;
   font-weight: 500;
@@ -55,4 +59,49 @@
   font-size: 2rem;
   width: 3.2rem;
   color: #555;
+}
+
+.coppy__popup {
+  position: fixed;
+  left: 2rem;
+  bottom: 1rem;
+
+  padding: 1.6rem;
+  background-color: #242526;
+  color: #e4e6eb;
+  font-weight: 300;
+
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+}
+
+.coppy__message {
+  display: flex;
+  align-items: center;
+}
+
+.coppy__message i {
+  color: var(--color-green);
+  margin-right: 0.6rem;
+
+  font-size: 1.8rem;
+}
+
+.coppy__popup-close {
+  --size: 2.4rem;
+  width: var(--size);
+  height: var(--size);
+
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #555;
+
+  cursor: pointer;
+}
+
+.overlay {
+  z-index: 1;
 }

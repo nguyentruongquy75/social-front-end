@@ -25,6 +25,8 @@ export default function Notifications(props) {
   const toggleDisplayNotifications = () =>
     setIsDisplayNotifications((isDisplay) => !isDisplay);
 
+  const hideNotifications = () => setIsDisplayNotifications(false);
+
   // unread notifications
   const unreadNotifiacations = notifiactions
     .filter((notification) => !notification.isRead)
@@ -117,7 +119,11 @@ export default function Notifications(props) {
               <div className={styles["message"]}>Chưa có thông báo</div>
             )}
             {notifiactions.map((noti) => (
-              <Notification key={noti._id} notification={noti} />
+              <Notification
+                key={noti._id}
+                notification={noti}
+                onClose={hideNotifications}
+              />
             ))}
           </div>
         </Card>

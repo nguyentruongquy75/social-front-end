@@ -11,6 +11,7 @@ import PrivateRoute from "./components/privateRoute/PrivateRoute";
 
 import { useContext } from "react";
 import userContext from "./context/userCtx";
+import PostDetailPage from "./pages/PostDetailPage";
 
 function App() {
   const context = useContext(userContext);
@@ -31,6 +32,7 @@ function App() {
                 />
                 <Route path="/people/*" element={<PeoplePage />} />
                 <Route path="/:userId/profile/*" element={<ProfilePage />} />
+                <Route path="/posts/:id" element={<PostDetailPage />} />
               </Routes>
             </Main>
           </PrivateRoute>

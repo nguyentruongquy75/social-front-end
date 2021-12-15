@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 
 import Card from "../ui/Card";
-import Tag from "../ui/Tag";
 import PostCreateModal from "./PostCreateModal";
 
 import styles from "./PostCreate.module.css";
@@ -23,9 +22,7 @@ export default function PostCreate(props) {
 
   return (
     <>
-      {isDisplayModal && (
-        <PostCreateModal onChange={props.onChange} onClose={hideModal} />
-      )}
+      {isDisplayModal && <PostCreateModal onClose={hideModal} />}
       {isDisplayModal && <Overlay onClick={hideModal} />}
       <Card className={styles.card}>
         <h6 className={styles.heading}>

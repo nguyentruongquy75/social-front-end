@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { API_user } from "../../config";
 import Spinner from "../spinner/Spinner";
 import Button from "../ui/Button";
@@ -7,6 +7,8 @@ import Button from "../ui/Button";
 import styles from "./Search.module.css";
 
 export default function Search() {
+  const location = useLocation();
+  const inputRef = useRef();
   const [inputValue, setInputValue] = useState("");
   const [result, setResult] = useState([]);
   const [status, setStatus] = useState("initial");
@@ -37,6 +39,13 @@ export default function Search() {
     }
   }, [inputValue]);
 
+  // blur input when change link
+  useEffect(() => {
+    if (status !== "initial") {
+      inputRef.current.blur();
+    }
+  }, [location.pathname]);
+
   return (
     <div>
       <div className={styles["search-input"]}>
@@ -45,6 +54,7 @@ export default function Search() {
           type="text"
           value={inputValue}
           placeholder="Search"
+          ref={inputRef}
         />
         <Button>
           <i className="fas fa-search"></i>

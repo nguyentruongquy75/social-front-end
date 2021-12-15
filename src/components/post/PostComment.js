@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { API_post } from "../../config";
 
 import Comment from "../comment/Comment";
@@ -9,6 +10,8 @@ import styles from "./PostComment.module.css";
 
 export default function PostComment(props) {
   const postId = props.postId;
+  const postAuthId = props.postAuthId;
+  const location = useLocation();
 
   const [status, setStatus] = useState("initial");
   const [comments, setComments] = useState([]);
@@ -30,6 +33,21 @@ export default function PostComment(props) {
     }
   }, [hasChange]);
 
+  // scroll to hash
+  useEffect(() => {
+    if (status === "finished" && location.hash) {
+      const activeComment = document.getElementById(location.hash.slice(1));
+      const commentInfo = activeComment.children[1].children[0];
+      commentInfo.classList.add(styles.active);
+      activeComment.scrollIntoView();
+      const removeActive = () => commentInfo.classList.remove(styles.active);
+
+      document.addEventListener("mousedown", removeActive);
+
+      return () => document.removeEventListener("mousedown", removeActive);
+    }
+  }, [status]);
+
   return (
     <div className={styles["post__comment"]}>
       <CommentInput setComments={setComments} postId={postId} />
@@ -45,6 +63,7 @@ export default function PostComment(props) {
             reply={comment.reply}
             key={comment._id}
             comment={comment}
+            postAuthId={postAuthId}
           />
         ))}
       </div>

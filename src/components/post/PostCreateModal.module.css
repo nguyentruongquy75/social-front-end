@@ -107,7 +107,7 @@
 
 .input textarea {
   width: 100% !important;
-  height: 10rem;
+  min-height: 15rem;
   resize: none;
   font-size: 2rem;
 }

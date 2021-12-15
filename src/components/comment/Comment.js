@@ -10,7 +10,6 @@ import { API_comments } from "../../config";
 import Reply from "./Reply";
 import Spinner from "../spinner/Spinner";
 import Card from "../ui/Card";
-import Button from "../ui/Button";
 import CommentEdit from "./CommentEdit";
 
 function Comment(props) {
@@ -27,7 +26,14 @@ function Comment(props) {
   const [status, setStatus] = useState("initial");
   const [isDisplayCommentSetting, setIsDisplayCommentSetting] = useState(false);
   const [isRemoveComment, setIsRemoveComment] = useState(false);
-  const [isDisplayCommentEdit, setIsDisplayCommentEdit] = useState(false);
+  // const [removeComment, setRemoveComment] = useState({
+  //   isDisplay: false,
+  //   status: "initial",
+  // });
+  const [editComment, setEditComment] = useState({
+    isDisplay: false,
+    status: "initial",
+  });
 
   // Reaction
   const authReaction = commentReactions.find(
@@ -107,7 +113,10 @@ function Comment(props) {
 
   // remove comment
 
-  const removeComment = () => setIsRemoveComment(true);
+  const removeComment = () => {
+    setIsRemoveComment(true);
+    hideCommentSetting();
+  };
 
   const twoMostReactions = getTwoMostReactions(commentReactions);
 
@@ -123,11 +132,24 @@ function Comment(props) {
 
   // edit comment
   const displayCommentEdit = () => {
-    setIsDisplayCommentEdit(true);
+    setEditComment((prev) => ({
+      ...prev,
+      isDisplay: true,
+    }));
     hideCommentSetting();
   };
 
-  const hideCommentEdit = () => setIsDisplayCommentEdit(false);
+  const hideCommentEdit = () =>
+    setEditComment((prev) => ({
+      ...prev,
+      isDisplay: false,
+    }));
+
+  const changeStatusEditComment = (status) =>
+    setEditComment((prev) => ({
+      ...prev,
+      status,
+    }));
 
   // send request update reaction of comment
   useEffect(async () => {
@@ -221,7 +243,7 @@ function Comment(props) {
   }, [isRemoveComment]);
 
   return (
-    <div className={styles["comment"]}>
+    <div className={styles["comment"]} id={comment._id}>
       <div className={styles["comment__avatar"]}>
         <img src={comment.user.avatar} alt={comment.user.fullName} />
       </div>
@@ -229,16 +251,17 @@ function Comment(props) {
       <div className={styles["comment__info-container"]}>
         <div className={styles["comment__info"]}>
           <h6>{fullName}</h6>
-          {isDisplayCommentEdit && (
+          {editComment.isDisplay && (
             <CommentEdit
               message={comment.message}
               onClose={hideCommentEdit}
               commentId={comment._id}
               onCommentChange={props.onCommentChange}
+              changeStatusEditComment={changeStatusEditComment}
             />
           )}
 
-          {!isDisplayCommentEdit && <p>{comment.message}</p>}
+          {!editComment.isDisplay && <p>{comment.message}</p>}
 
           {commentReactions.length > 0 && (
             <div className={styles["comment__reaction"]}>
@@ -257,24 +280,36 @@ function Comment(props) {
             </div>
           )}
 
-          <div
-            onClick={toggleDisplayCommentSetting}
-            className={styles["comment__setting"]}
-          >
-            <i className="fas fa-ellipsis-h"></i>
-            {isDisplayCommentSetting && (
-              <Card
-                onClick={(e) => e.stopPropagation()}
-                className={styles["comment__setting-modal"]}
-                ref={commentSettingModalRef}
-              >
-                <ul>
-                  <li onClick={displayCommentEdit}>Chỉnh sửa</li>
-                  <li onClick={removeComment}>Xoá</li>
-                </ul>
-              </Card>
-            )}
-          </div>
+          {(context.id === props.postAuthId ||
+            context.id === comment.user._id) && (
+            <div
+              onClick={toggleDisplayCommentSetting}
+              className={styles["comment__setting"]}
+            >
+              <i className="fas fa-ellipsis-h"></i>
+              {isDisplayCommentSetting && (
+                <Card
+                  onClick={(e) => e.stopPropagation()}
+                  className={styles["comment__setting-modal"]}
+                  ref={commentSettingModalRef}
+                >
+                  <ul>
+                    {context.id === comment.user._id && (
+                      <li onClick={displayCommentEdit}>Chỉnh sửa</li>
+                    )}
+                    <li onClick={removeComment}>Xoá</li>
+                  </ul>
+                </Card>
+              )}
+            </div>
+          )}
+
+          {editComment.status === "loading" && (
+            <div className={styles["remove__loading"]}>Đang lưu ...</div>
+          )}
+          {isRemoveComment && (
+            <div className={styles["remove__loading"]}>Đang xoá ...</div>
+          )}
         </div>
         <div className={styles["comment__action"]}>
           <div

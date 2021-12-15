@@ -9,3 +9,7 @@
   display: flex;
   justify-content: center;
 }
+
+.active {
+  background-color: #e7f3ff;
+}
