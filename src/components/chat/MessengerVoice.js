@@ -15,6 +15,8 @@ import { API_chat } from "../../config";
 
 let intervalId = null;
 let conn = null;
+let autoDisconnectTimeoutId = null;
+const timeWaitSecond = 40;
 
 export default function MessengerVoice(props) {
   const context = useContext(userContext);
@@ -26,6 +28,7 @@ export default function MessengerVoice(props) {
     isMutedMicro: false,
     isMutedSpeaker: false,
     isHangUp: false,
+    isTimeout: false,
   });
 
   const [isPickUp, setIsPickUp] = useState(false);
@@ -36,6 +39,13 @@ export default function MessengerVoice(props) {
 
   // pickup
   const pickUp = () => setIsPickUp(true);
+
+  // timeout
+  const timeout = () =>
+    setActions((prev) => ({
+      ...prev,
+      isTimeout: true,
+    }));
 
   //handup
   const handUp = () => {
@@ -112,25 +122,29 @@ export default function MessengerVoice(props) {
 
   // mute speaker
   useEffect(() => {
-    if (actions.isMutedSpeaker) {
-      audioRef.current.muted = true;
-    } else {
-      audioRef.current.muted = false;
+    if (audioRef.current) {
+      if (actions.isMutedSpeaker) {
+        audioRef.current.muted = true;
+      } else {
+        audioRef.current.muted = false;
+      }
     }
   }, [actions.isMutedSpeaker]);
 
   // mute mic
   useEffect(() => {
-    if (actions.isMutedMicro) {
-      stream.getAudioTracks().forEach(function (track) {
-        track.enabled = false;
-      });
-    } else {
-      stream.getAudioTracks().forEach(function (track) {
-        track.enabled = true;
-      });
+    if (stream) {
+      if (actions.isMutedMicro) {
+        stream.getAudioTracks().forEach(function (track) {
+          track.enabled = false;
+        });
+      } else {
+        stream.getAudioTracks().forEach(function (track) {
+          track.enabled = true;
+        });
+      }
     }
-  }, [actions.isMutedSpeaker]);
+  }, [actions.isMutedMicro]);
 
   //pick up receiver
   useEffect(() => {
@@ -257,6 +271,27 @@ export default function MessengerVoice(props) {
     };
   }, []);
 
+  // auto disconnect when receiver dont pickup
+  useEffect(() => {
+    if (room.status === "call") {
+      if (!isPickUp) {
+        autoDisconnectTimeoutId = setTimeout(() => {
+          timeout();
+          socket.emit("callvoicedisconnect", {
+            user: {
+              _id: context.id,
+              fullName: context.fullName,
+              avatar: context.avatar,
+            },
+            chatRoom: room,
+          });
+        }, timeWaitSecond * 1000);
+      } else {
+        clearTimeout(autoDisconnectTimeoutId);
+      }
+    }
+  }, [isPickUp]);
+
   return (
     <Card className={styles.card}>
       <audio ref={audioRef} hidden></audio>
@@ -269,7 +304,10 @@ export default function MessengerVoice(props) {
         </div>
         <span className={styles["messenger__name"]}>
           {!actions.isHangUp && (room.name ? room.name : room.user.fullName)}
-          {actions.isHangUp && "Cuộc trò chuyện đã kết thúc"}
+          {actions.isHangUp &&
+            !actions.isTimeout &&
+            "Cuộc trò chuyện đã kết thúc"}
+          {actions.isHangUp && actions.isTimeout && "Người nhận không nghe máy"}
         </span>
         <span className={styles["messenger__time"]}>
           {!isPickUp && (room.status === "call" ? "Ringing" : "Đang gọi bạn")}

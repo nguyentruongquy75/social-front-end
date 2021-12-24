@@ -15,6 +15,8 @@ import { useDispatch } from "react-redux";
 import { removePopupChat } from "../../redux/updateSlice";
 
 let conn = null;
+let autoDisconnectTimeoutId = null;
+const timoutSecond = 40;
 
 export default function MessengerVideo(props) {
   const context = useContext(userContext);
@@ -28,6 +30,7 @@ export default function MessengerVideo(props) {
     isPickUp: false,
     isMutedMic: false,
     isOffCam: false,
+    isTimeout: false,
   });
   const [localStream, setLocalStream] = useState(null);
   const [remoteStream, setRemoteStream] = useState(null);
@@ -37,6 +40,12 @@ export default function MessengerVideo(props) {
     setActions((prev) => ({
       ...prev,
       isHangUp: true,
+    }));
+
+  const timeout = () =>
+    setActions((prev) => ({
+      ...prev,
+      isTimeout: true,
     }));
 
   const pickUp = () =>
@@ -138,7 +147,6 @@ export default function MessengerVideo(props) {
             video: true,
           });
 
-          console.log("stream", stream);
           setLocalStream(stream);
           call.answer(stream);
           call.on("stream", (remoteStream) => {
@@ -175,15 +183,9 @@ export default function MessengerVideo(props) {
 
       setPeer(null);
       // close stream
-      localStream &&
-        localStream.getVideoTracks().forEach((track) => {
-          track.stop();
-        });
+      localStream && localStream.getVideoTracks()[0].stop();
 
-      localStream &&
-        localStream.getAudioTracks().forEach((track) => {
-          track.stop();
-        });
+      localStream && localStream.getAudioTracks()[0].stop();
 
       setLocalStream(null);
       setRemoteStream(null);
@@ -244,13 +246,33 @@ export default function MessengerVideo(props) {
     localVideoRef.current && (localVideoRef.current.srcObject = localStream);
   }, [localStream]);
 
-  console.log("localstream", actions, localStream);
-
   // load remote to video tag
 
   useEffect(() => {
     remoteVideoRef.current && (remoteVideoRef.current.srcObject = remoteStream);
   }, [remoteStream]);
+
+  // autodisconnect timeout
+  // auto disconnect when receiver dont pickup
+  useEffect(() => {
+    if (room.status === "call") {
+      if (!actions.isPickUp) {
+        autoDisconnectTimeoutId = setTimeout(() => {
+          timeout();
+          socket.emit("callvideodisconnect", {
+            user: {
+              _id: context.id,
+              fullName: context.fullName,
+              avatar: context.avatar,
+            },
+            chatRoom: room,
+          });
+        }, timoutSecond * 1000);
+      } else {
+        clearTimeout(autoDisconnectTimeoutId);
+      }
+    }
+  }, [actions.isPickUp]);
 
   return (
     <Card className={styles.card}>
@@ -293,8 +315,15 @@ export default function MessengerVideo(props) {
           <div className={styles["video__container"]}>
             {(!actions.isPickUp || actions.isHangUp) && (
               <div className={styles["video__container-wait"]}>
-                {!actions.isPickUp && "Đang chờ kết nối ..."}
-                {actions.isHangUp && "Cuộc trò chuyện đã kết thúc ..."}
+                {!actions.isPickUp &&
+                  !actions.isHangUp &&
+                  "Đang chờ kết nối ..."}
+                {actions.isHangUp &&
+                  !actions.isTimeout &&
+                  "Cuộc trò chuyện đã kết thúc ..."}
+                {actions.isHangUp &&
+                  actions.isTimeout &&
+                  "Người nhận không bắt máy ..."}
               </div>
             )}
             <video
