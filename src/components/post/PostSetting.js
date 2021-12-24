@@ -7,6 +7,7 @@ import { changeNewsfeed } from "../../redux/updateSlice";
 import Card from "../ui/Card";
 import PostCreateModal from "../post/PostCreateModal";
 import Overlay from "../overlay/Overlay";
+import Spinner from "../spinner/Spinner";
 
 import styles from "./PostSetting.module.css";
 
@@ -52,8 +53,6 @@ export default function PostSetting(props) {
   }, [isDisplaySettingModal]);
 
   // remove post
-  const dispatch = useDispatch();
-  const updateNewsfeed = () => dispatch(changeNewsfeed());
   useEffect(() => {
     const removePost = async () => {
       try {
@@ -68,11 +67,10 @@ export default function PostSetting(props) {
         });
       } catch (error) {
         console.log(error);
-      } finally {
-        updateNewsfeed();
       }
     };
     if (isRemove) {
+      hideSettingModal();
       removePost();
     }
   }, [isRemove]);
@@ -161,6 +159,11 @@ export default function PostSetting(props) {
       )}
       {isEdit && (
         <Overlay onClick={removeEditPost} className={styles["overlay"]} />
+      )}
+      {isRemove && (
+        <div className={styles["remove__loading"]}>
+          <Spinner />
+        </div>
       )}
     </>
   );

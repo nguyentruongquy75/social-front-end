@@ -11,25 +11,21 @@ import Reply from "./Reply";
 import Spinner from "../spinner/Spinner";
 import Card from "../ui/Card";
 import CommentEdit from "./CommentEdit";
+import CommentReaction from "./CommentReaction";
 
 function Comment(props) {
   const context = useContext(userContext);
   const comment = props.comment;
-  const fullName = `${comment.user.lastName} ${comment.user.firstName}`;
+  const fullName = comment.user.fullName;
   const commentSettingModalRef = useRef();
 
   const [isDisplayReplyInput, setIsDisplayReplyInput] = useState(false);
-  const [isDisplayReplyComments, setIsDisplayreplyComments] = useState(false);
   const [isDisplayReactionHover, setIsDisplayReactionHover] = useState(false);
   const [commentReactions, setCommentReactions] = useState(comment.reactions);
-  const [reply, setReply] = useState([]);
-  const [status, setStatus] = useState("initial");
+
   const [isDisplayCommentSetting, setIsDisplayCommentSetting] = useState(false);
   const [isRemoveComment, setIsRemoveComment] = useState(false);
-  // const [removeComment, setRemoveComment] = useState({
-  //   isDisplay: false,
-  //   status: "initial",
-  // });
+
   const [editComment, setEditComment] = useState({
     isDisplay: false,
     status: "initial",
@@ -59,28 +55,8 @@ function Comment(props) {
     }
   };
 
-  const displayReplyComments = () => setIsDisplayreplyComments(true);
-
   const displayReplyInput = () => {
     setIsDisplayReplyInput(true);
-    displayReplyComments();
-  };
-
-  const getTwoMostReactions = (reactions) => {
-    const uniqueReaction = new Set(reactions);
-
-    const result = Array.from(uniqueReaction).map((reaction) => {
-      const reactionCount = reactions.filter(
-        (item) => item.type === reaction.type
-      ).length;
-
-      return {
-        type: reaction.type,
-        count: reactionCount,
-      };
-    });
-
-    return result.sort((a, b) => b.count - a.count).slice(0, 2);
   };
 
   const hideReactionHover = (e) => {
@@ -118,7 +94,28 @@ function Comment(props) {
     hideCommentSetting();
   };
 
-  const twoMostReactions = getTwoMostReactions(commentReactions);
+  // duration
+  const duration = Date.now() - new Date(comment.createAt);
+  const convertDurationToString = (duration) => {
+    const seconds = duration / 1000;
+    const minutes = seconds / 60;
+
+    if (seconds < 60) {
+      return "Vừa xong";
+    }
+
+    if (minutes < 60) {
+      return `${Math.floor(minutes)} phút`;
+    }
+    const hours = minutes / 60;
+    if (hours < 24) {
+      return `${Math.floor(hours)} giờ`;
+    }
+
+    const days = hours / 24;
+
+    return `${Math.floor(days)} ngày`;
+  };
 
   useEffect(() => {
     const id = setTimeout(() => {
@@ -210,32 +207,27 @@ function Comment(props) {
     }
   }, [reaction]);
 
-  // get reply
-  useEffect(async () => {
-    if (isDisplayReplyComments) {
-      setStatus("loading");
-      const response = await fetch(`${API_comments}/${comment._id}/reply`);
-      const reply = await response.json();
-      setReply(reply);
-      setStatus("finished");
-    }
-  }, [isDisplayReplyComments]);
-
   // remove comment
   useEffect(async () => {
+    console.log(comment);
     if (isRemoveComment) {
       try {
-        const response = await fetch(`${API_comments}`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            _id: comment._id,
-          }),
-        });
+        const response = await fetch(
+          `${API_comments}${
+            comment.replyOf ? `/${comment.replyOf}/reply` : ""
+          }`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              _id: comment._id,
+            }),
+          }
+        );
 
-        props.onCommentChange();
+        props.onCommentChange && props.onCommentChange();
       } catch (error) {
         console.log(error);
       }
@@ -263,22 +255,10 @@ function Comment(props) {
 
           {!editComment.isDisplay && <p>{comment.message}</p>}
 
-          {commentReactions.length > 0 && (
-            <div className={styles["comment__reaction"]}>
-              <div className={styles["comment__reaction-icon"]}>
-                {twoMostReactions.map((reaction, index) => {
-                  const reactionIcon = reactionsIcon.find(
-                    (item) => item.type === reaction.type
-                  ).icon;
-
-                  return (
-                    <img src={reactionIcon} key={index} alt={reaction.type} />
-                  );
-                })}
-              </div>
-              <span>{commentReactions.length}</span>
-            </div>
-          )}
+          <CommentReaction
+            commentId={comment._id}
+            commentReactions={commentReactions}
+          />
 
           {(context.id === props.postAuthId ||
             context.id === comment.user._id) && (
@@ -342,25 +322,16 @@ function Comment(props) {
           >
             Phản hồi
           </div>
+          <span className={styles["createAt"]}>
+            {convertDurationToString(duration)}
+          </span>
         </div>
 
-        {status !== "finished" && props.reply.length > 0 && (
-          <div
-            onClick={displayReplyComments}
-            className={styles["comment__reply"]}
-          >
-            <i className="fas fa-reply"></i> {props.reply.length} phản hồi
-            {status === "loading" && <Spinner className={styles.spinner} />}
-          </div>
-        )}
-
-        {isDisplayReplyComments && <Reply reply={reply} />}
-
-        {isDisplayReplyInput && (
-          <div>
-            <CommentInput setComments={setReply} commentId={comment._id} />
-          </div>
-        )}
+        <Reply
+          commentId={comment._id}
+          isDisplayReplyInput={isDisplayReplyInput}
+          replyCount={comment.reply.length}
+        />
       </div>
     </div>
   );

@@ -1,0 +1,25 @@
+.card__actions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: center;
+  gap: 0.6rem;
+
+  font-size: 1.8rem;
+}
+
+.card__actions div {
+  --size: 2.9rem;
+  width: var(--size);
+  height: var(--size);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #bec2c9;
+  border-radius: 50%;
+}
+
+.card__actions div:hover {
+  cursor: pointer;
+  background-color: var(--color-gray-light);
+}

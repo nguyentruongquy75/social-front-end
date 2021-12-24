@@ -10,7 +10,7 @@ export default function ProfileCard() {
   const context = useContext(userContext);
 
   return (
-    <Link to="/profile/">
+    <Link to="/profile/" className={styles["card__link"]}>
       <Card className={styles.card}>
         <div className={styles["profile__img"]}>
           <img src={context.avatar} alt={context.fullName} />

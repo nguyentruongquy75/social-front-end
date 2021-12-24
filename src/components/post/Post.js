@@ -17,20 +17,19 @@ import ReactionStatistic from "../reaction/ReactionStatistic";
 import Overlay from "../overlay/Overlay";
 import userContext from "../../context/userCtx";
 
-import { useSelector } from "react-redux";
+import socket from "../../socket";
 
 export default function Post(props) {
   const post = props.post;
   const publishedAt = new Date(props.post.publishedAt);
-  const comments = props.post.comments;
   const context = useContext(userContext);
 
-  // get change reaction from redux
-  const hasChangePostReaction = useSelector(
-    (state) => state.update.hasChangePostReaction
-  );
+  // get change reaction
+  const [hasChangePostReaction, setHasChangePostReaction] = useState(false);
+  const [hasChangePostComment, setHasChangePostComment] = useState(false);
 
   const [reactions, setReactions] = useState([]);
+  const [comments, setComments] = useState([]);
   const [isDisplayComment, setIsDisplayComment] = useState(
     props.isDisplayComment || false
   );
@@ -42,6 +41,9 @@ export default function Post(props) {
   });
   const [isDisplayReactionStatistic, setIsDisplayReactionStatistic] =
     useState(false);
+
+  const [reactionSocket, setReactionSocket] = useState(null);
+  const [commentSocket, setCommentSocket] = useState(null);
 
   const duration = Date.now() - publishedAt;
 
@@ -132,6 +134,57 @@ export default function Post(props) {
   const displayReactionStatistic = () => setIsDisplayReactionStatistic(true);
   const hideReactionStatistic = () => setIsDisplayReactionStatistic(false);
 
+  // change post reaction
+  const changePostReaction = () =>
+    setHasChangePostReaction((hasChange) => !hasChange);
+
+  // change post comment
+  const changePostComment = () =>
+    setHasChangePostComment((hasChange) => !hasChange);
+
+  // count comment
+  const calculateCommentCount = () => {
+    return comments.reduce((sum, curr) => {
+      return sum + curr.reply.length + 1;
+    }, 0);
+  };
+
+  //reaction socket
+  socket.on(post._id + "postreactions", (data) => {
+    setReactionSocket(data);
+  });
+
+  useEffect(() => {
+    if (reactionSocket) {
+      changePostReaction();
+    }
+  }, [reactionSocket]);
+
+  //comment socket
+  socket.on(post._id + "postcomment", (data) => {
+    setCommentSocket(data);
+  });
+
+  useEffect(() => {
+    if (commentSocket) {
+      changePostComment();
+    }
+  }, [commentSocket]);
+
+  // fetch comments
+  useEffect(async () => {
+    try {
+      const response = await fetch(`${API_post}/${post._id}/comments`);
+      const comments = await response.json();
+
+      setComments(comments);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setCommentSocket(null);
+    }
+  }, [hasChangePostComment]);
+
   // fetch reactions
   useEffect(async () => {
     try {
@@ -143,6 +196,7 @@ export default function Post(props) {
       console.log(error);
     } finally {
       setStatusReactionInformation("finished");
+      reactionSocket && setReactionSocket(null);
     }
   }, [hasChangePostReaction]);
 
@@ -260,7 +314,9 @@ export default function Post(props) {
               )}
             </div>
             <div className={styles["post__info-right"]}>
-              {comments.length > 0 && <span>{comments.length} bình luận</span>}
+              {comments.length > 0 && (
+                <span>{calculateCommentCount()} bình luận</span>
+              )}
               {/* <span>43 lượt chia sẻ</span> */}
             </div>
           </div>
@@ -269,11 +325,17 @@ export default function Post(props) {
             reactions={reactions}
             postId={post._id}
             onComment={displayComment}
+            changePostReaction={changePostReaction}
           />
         </div>
 
         {isDisplayComment && (
-          <PostComment postAuthId={post.user._id} postId={post._id} />
+          <PostComment
+            comments={comments}
+            postAuthId={post.user._id}
+            postId={post._id}
+            onCommentChange={changePostComment}
+          />
         )}
       </Card>
       {isDisplayReactionStatistic && (

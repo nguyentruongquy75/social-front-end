@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Route, Routes, useParams, useLocation } from "react-router-dom";
+import { Route, Routes, useParams } from "react-router-dom";
 import Overlay from "../components/overlay/Overlay";
 import ProfileEdit from "../components/profile/ProfileEdit";
 
@@ -36,6 +36,7 @@ export default function ProfilePage(props) {
     setIsSendedInvitation((isSend) => !isSend);
   };
 
+  // fetch user
   useEffect(async () => {
     try {
       const response = await fetch(
@@ -51,7 +52,7 @@ export default function ProfilePage(props) {
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }, [params]);
 
   useEffect(async () => {
     if (!isInitial) {

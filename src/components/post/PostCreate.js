@@ -22,7 +22,9 @@ export default function PostCreate(props) {
 
   return (
     <>
-      {isDisplayModal && <PostCreateModal onClose={hideModal} />}
+      {isDisplayModal && (
+        <PostCreateModal onChange={props.onChange} onClose={hideModal} />
+      )}
       {isDisplayModal && <Overlay onClick={hideModal} />}
       <Card className={styles.card}>
         <h6 className={styles.heading}>

@@ -15,8 +15,7 @@ export default function PostList(props) {
       {props.status === "finished" && props.list.length === 0 && (
         <span className={styles.message}>Bản tin trống</span>
       )}
-      {props.status === "finished" &&
-        props.list.length > 0 &&
+      {props.list.length > 0 &&
         props.list.map((post) => <Post key={post._id} post={post} />)}
     </>
   );

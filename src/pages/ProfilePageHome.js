@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import PostCreate from "../components/post/PostCreate";
 import Post from "../components/post/Post";
@@ -8,8 +8,12 @@ import ProfileIntroduction from "../components/profile/ProfileIntroduction";
 import styles from "./ProfilePageHome.module.css";
 import { API_user } from "../config";
 import Spinner from "../components/spinner/Spinner";
+import { useParams } from "react-router-dom";
+import userContext from "../context/userCtx";
 
 export default function ProfilePageHome(props) {
+  const context = useContext(userContext);
+  const params = useParams();
   const [status, setStatus] = useState("initial");
   const [posts, setPosts] = useState([]);
   const [isPostsChange, setIsPostsChange] = useState(false);
@@ -28,7 +32,7 @@ export default function ProfilePageHome(props) {
     } finally {
       setStatus("finished");
     }
-  }, [isPostsChange]);
+  }, [isPostsChange, params]);
 
   return (
     <div className={styles["container"]}>
@@ -38,7 +42,7 @@ export default function ProfilePageHome(props) {
       </aside>
 
       <div>
-        <PostCreate onChange={changePosts} />
+        {context.id === props.user._id && <PostCreate onChange={changePosts} />}
 
         {status === "loading" && (
           <div className={styles.loading}>

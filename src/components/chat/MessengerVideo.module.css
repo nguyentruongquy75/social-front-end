@@ -1,0 +1,150 @@
+.card {
+  background-color: var(--color-white);
+
+  width: 33rem;
+
+  overflow: hidden;
+}
+
+.messenger__receive {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  padding: 4rem;
+  min-height: 45rem;
+}
+
+.messenger__img {
+  --size: 8rem;
+  width: var(--size);
+  height: var(--size);
+}
+
+.messenger__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  border-radius: 50%;
+}
+
+.messenger__info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.messenger__name {
+  font-size: 1.8rem;
+  font-weight: 500;
+
+  display: block;
+  margin: 0.6rem 0;
+}
+
+.messenger__time {
+  font-size: 1.3rem;
+  font-weight: 300;
+
+  color: #aaa;
+}
+
+.messenger__actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.messenger__action {
+  --size: 5rem;
+  width: var(--size);
+  height: var(--size);
+
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 1.8rem;
+
+  cursor: pointer;
+}
+
+.messenger__action + .messenger__action {
+  margin-left: auto;
+}
+
+.messenger__action--hangup {
+  color: var(--color-white);
+  background-color: var(--color-red);
+}
+
+.messenger__action--pickup {
+  color: var(--color-white);
+  background-color: var(--color-green);
+}
+
+.messenger__video {
+  position: relative;
+  min-height: 45rem;
+}
+
+.video__container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.video__container-wait {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--color-white);
+}
+
+.video__container .video__remote {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video__container .video__local {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 6rem;
+  height: 8rem;
+  object-fit: cover;
+}
+
+.messenger__video-actions {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.messenger__video-action--disabled {
+  background: rgba(0, 0, 0, 0.5);
+  color: var(--color-white);
+}
+
+.messenger__video-action--active {
+  background-color: var(--color-white);
+}

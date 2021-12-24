@@ -1,0 +1,18 @@
+.comment__reply {
+  font-size: 1.4rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: fit-content;
+
+  display: flex;
+  align-items: center;
+}
+
+.comment__reply i {
+  margin-right: 0.6rem;
+}
+
+.comment__reply .spinner {
+  --size: 1.6rem;
+  margin-left: 1.2rem;
+}

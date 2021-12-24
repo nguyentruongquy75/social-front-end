@@ -1,0 +1,95 @@
+.card {
+  position: absolute;
+  top: calc(100% + 1.2rem);
+  right: 0;
+  width: 36rem;
+  height: 80vh;
+
+  background-color: var(--color-white);
+  padding: 1.2rem;
+  overflow: hidden;
+}
+
+.card h2 {
+  margin: 0;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #050505;
+}
+
+.search__top {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 1.6rem;
+}
+
+.back {
+  --size: 3.6rem;
+  width: var(--size);
+  height: var(--size);
+
+  border-radius: 50%;
+
+  font-size: 2rem;
+  color: var(--color-text-secondary);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back:hover {
+  cursor: pointer;
+  background-color: var(--color-gray-light);
+}
+
+.search {
+  padding-left: 2.6rem;
+  position: relative;
+  background-color: var(--color-gray-light);
+  border-radius: 5rem;
+
+  flex: 1;
+}
+
+.search input {
+  width: 100%;
+  height: 3.6rem;
+  padding: 0.6rem;
+  background-color: transparent;
+}
+
+.search__label {
+  position: absolute;
+  top: 50%;
+  left: 1.3rem;
+  transform: translateY(-50%);
+
+  font-size: 1.4rem;
+  color: #777;
+}
+
+.chat__list {
+  margin-top: 0.8rem;
+}
+
+.result__list {
+  overflow-y: scroll;
+  max-height: 85%;
+
+  padding: 0.8rem 0;
+}
+
+.result__list::-webkit-scrollbar {
+  width: 8px;
+  display: none;
+}
+
+.result__list:hover::-webkit-scrollbar {
+  display: block;
+}
+
+.result__list::-webkit-scrollbar-thumb {
+  background-color: #bcc0c4;
+}

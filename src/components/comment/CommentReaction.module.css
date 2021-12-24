@@ -1,0 +1,29 @@
+.comment__reaction {
+  position: absolute;
+  bottom: 0;
+  right: -2rem;
+
+  padding: 0.1rem 0.4rem;
+  border-radius: 2.5rem;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-white);
+
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1.3rem;
+}
+
+.comment__reaction-icon {
+  display: flex;
+  align-items: center;
+
+  gap: 0.2rem;
+}
+
+.comment__reaction-icon img {
+  --size: 1.6rem;
+  width: var(--size);
+  height: var(--size);
+  object-fit: cover;
+}

@@ -15,10 +15,11 @@ export default function Notifications(props) {
   const cardRef = useRef();
   const iconRef = useRef();
 
-  const [notifiactions, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState([]);
   const [isDisplayNotifications, setIsDisplayNotifications] = useState(false);
   const [hasChange, setHasChange] = useState(false);
   const [popupNotification, setPopupNotification] = useState(null);
+  const [dataSocket, setDataSocket] = useState("change");
 
   const changeNotification = () => setHasChange((hasChange) => !hasChange);
 
@@ -28,19 +29,21 @@ export default function Notifications(props) {
   const hideNotifications = () => setIsDisplayNotifications(false);
 
   // unread notifications
-  const unreadNotifiacations = notifiactions
+  const unreadNotifiacations = notifications
     .filter((notification) => !notification.isRead)
     .map((notification) => notification._id);
 
   // fecth api
   useEffect(async () => {
-    try {
-      const respose = await fetch(`${API_user}/${context.id}/notifications`);
-      const notifiactions = await respose.json();
+    if (dataSocket) {
+      try {
+        const respose = await fetch(`${API_user}/${context.id}/notifications`);
+        const notifiactions = await respose.json();
 
-      setNotifications(notifiactions);
-    } catch (error) {
-      console.log(error);
+        setNotifications(notifiactions);
+      } catch (error) {
+        console.log(error);
+      }
     }
   }, [context, hasChange]);
 
@@ -80,11 +83,20 @@ export default function Notifications(props) {
 
   // socket notification
 
-  socket.on(context.id, (data) => {
-    console.log(data);
-    changeNotification();
-    setPopupNotification(data);
+  socket.on(`${context.id}notification`, (data) => {
+    setDataSocket(data);
   });
+
+  useEffect(() => {
+    if (dataSocket) {
+      changeNotification();
+      typeof dataSocket !== "string" && setPopupNotification(dataSocket);
+    }
+
+    return () => {
+      dataSocket && setDataSocket(null);
+    };
+  }, [dataSocket]);
 
   // remove popup
   useEffect(() => {
@@ -115,10 +127,10 @@ export default function Notifications(props) {
             <h3>Thông báo</h3>
           </div>
           <div>
-            {notifiactions.length === 0 && (
+            {notifications.length === 0 && (
               <div className={styles["message"]}>Chưa có thông báo</div>
             )}
-            {notifiactions.map((noti) => (
+            {notifications.map((noti) => (
               <Notification
                 key={noti._id}
                 notification={noti}

@@ -7,14 +7,10 @@ import styles from "./PostAction.module.css";
 import reactionsIcon from "../../reactions";
 import userContext from "../../context/userCtx";
 import { API_post } from "../../config";
-import { useDispatch } from "react-redux";
-import { changePostReaction } from "../../redux/updateSlice";
 
 export default function PostAction(props) {
   const context = useContext(userContext);
   const reactions = props.reactions;
-  const dispatch = useDispatch();
-  const changePostReactions = () => dispatch(changePostReaction());
 
   const authReaction = reactions.find(
     (reaction) => reaction.user._id === context.id
@@ -96,7 +92,7 @@ export default function PostAction(props) {
         });
         const deletedReaction = await response.json();
       }
-      changePostReactions();
+      props.changePostReaction();
     }
   }, [reaction]);
 

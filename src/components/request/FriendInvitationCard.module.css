@@ -3,6 +3,18 @@
   padding: 2rem 1.2rem;
 
   margin-top: 1.2rem;
+  animation: fadeIn 0.2s linear;
+}
+
+@keyframes fadeIn {
+  from {
+    transform: translateY(-5px);
+    opacity: 0.5;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .invitation__info {

@@ -46,10 +46,9 @@ export default function CommentInput(props) {
           });
         }
 
-        const newComment = await response.json();
-        console.log(newComment);
+        props.onCommentChange && props.onCommentChange();
+        props.onReplyChange && props.onReplyChange();
 
-        props.setComments((comments) => [...comments, newComment]);
         inputRef.current.value = "";
       } catch (error) {
         console.log(error);
@@ -62,6 +61,7 @@ export default function CommentInput(props) {
 
   useEffect(() => {
     inputRef.current.focus();
+    props.displayReplyComments && props.displayReplyComments();
   }, []);
 
   return (

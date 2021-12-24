@@ -1,5 +1,4 @@
 import React, { useContext, useRef, useState, useEffect } from "react";
-import Button from "../ui/Button";
 import Card from "../ui/Card";
 
 import GridImage from "react-fb-image-grid";
@@ -8,22 +7,19 @@ import userContext from "../../context/userCtx";
 
 import styles from "./PostCreateModal.module.css";
 import { API_post } from "../../config";
-import { useDispatch } from "react-redux";
-import { changeNewsfeed } from "../../redux/updateSlice";
 
 export default function PostCreateModal(props) {
   const context = useContext(userContext);
-  const dispatch = useDispatch();
 
   const [status, setStatus] = useState("initial");
   const [isAddPhoto, setIsAddPhoto] = useState(false);
-  const [imagePreview, setImagePreview] = useState(props.post.image || []);
-  const [title, setTitle] = useState(props.post.title || "");
+  const [imagePreview, setImagePreview] = useState(props.post?.image || []);
+  const [title, setTitle] = useState(props.post?.title || "");
 
   const addPhoto = () => setIsAddPhoto(true);
   const removePhoto = () => setIsAddPhoto(false);
 
-  const updateNewsfeed = () => dispatch(changeNewsfeed());
+  const updateNewsfeed = () => props.onChange();
 
   const textRef = useRef();
 
@@ -76,8 +72,12 @@ export default function PostCreateModal(props) {
   // disable button
   const buttonRef = useRef();
   useEffect(() => {
-    buttonRef.current.disabled =
-      title === props.post.title && imagePreview === props.post.image;
+    props.type === "edit" &&
+      (buttonRef.current.disabled =
+        title === props.post.title && imagePreview === props.post.image);
+
+    props.type !== "edit" &&
+      (buttonRef.current.disabled = title === "" && imagePreview.length === 0);
   }, [title, imagePreview]);
 
   return (

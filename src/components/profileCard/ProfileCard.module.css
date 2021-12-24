@@ -8,6 +8,10 @@
   cursor: pointer;
 }
 
+.card__link {
+  color: inherit;
+}
+
 .profile__img {
   width: var(--small-img-size);
   height: var(--small-img-size);
@@ -22,6 +26,6 @@
   border-radius: 50%;
 }
 
-.profile__info {
-  font-size: 2rem;
+.profile__info h6 {
+  font-size: 1.4rem;
 }

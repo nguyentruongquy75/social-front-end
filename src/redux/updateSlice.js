@@ -3,24 +3,28 @@ import { createSlice } from "@reduxjs/toolkit";
 const updateSlice = createSlice({
   name: "update",
   initialState: {
-    hasChangeNewsfeed: false,
-    hasChangePostReaction: false,
-    hasChangeNotifications: false,
+    popupChat: [],
   },
   reducers: {
-    changeNewsfeed(state) {
-      state.hasChangeNewsfeed = !state.hasChangeNewsfeed;
+    addPopupChat(state, action) {
+      const existChat = state.popupChat.find(
+        (chat) =>
+          chat._id === action.payload._id && chat.type === action.payload.type
+      );
+
+      if (!existChat) {
+        state.popupChat = [...state.popupChat, action.payload].slice(-2);
+      }
     },
-    changePostReaction: (state) => {
-      state.hasChangePostReaction = !state.hasChangePostReaction;
-    },
-    changeNotifications(state) {
-      state.hasChangeNotifications = !state.hasChangeNotifications;
+    removePopupChat(state, action) {
+      state.popupChat = state.popupChat.filter(
+        (chat) =>
+          chat._id !== action.payload._id || chat.type !== action.payload.type
+      );
     },
   },
 });
 
-export const { changeNewsfeed, changeNotifications, changePostReaction } =
-  updateSlice.actions;
+export const { addPopupChat, removePopupChat } = updateSlice.actions;
 
 export default updateSlice.reducer;

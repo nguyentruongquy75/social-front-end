@@ -11,16 +11,26 @@ import Request from "../components/request/Request";
 import styles from "./HomePage.module.css";
 import { API } from "../config";
 import userContext from "../context/userCtx";
-import { useSelector } from "react-redux";
+import socket from "../socket";
 
 export default function HomePage() {
   const context = useContext(userContext);
   const [status, setStatus] = useState("initial");
   const [newsfeed, setNewsfeed] = useState([]);
+  const [dataSocket, setDataSocket] = useState(null);
+  const [hasChangeNewsfeed, setHasChangeNewfeed] = useState(false);
 
-  const hasChangeNewsfeed = useSelector(
-    (state) => state.update.hasChangeNewsfeed
-  );
+  const changeNewsfeed = () => setHasChangeNewfeed((hasChange) => !hasChange);
+
+  socket.on(context.id + "newsfeed", (data) => {
+    setDataSocket(data);
+  });
+
+  useEffect(() => {
+    if (dataSocket) {
+      changeNewsfeed();
+    }
+  }, [dataSocket]);
 
   useEffect(async () => {
     try {
@@ -32,6 +42,7 @@ export default function HomePage() {
       console.log(err);
     } finally {
       setStatus("finished");
+      setDataSocket(null);
     }
   }, [context, hasChangeNewsfeed]);
 
@@ -43,7 +54,7 @@ export default function HomePage() {
       </aside>
 
       <div>
-        <PostCreate />
+        <PostCreate onChange={changeNewsfeed} />
         <PostList status={status} list={newsfeed} />
       </div>
 

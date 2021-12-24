@@ -3,11 +3,27 @@ import { API_user } from "../../config";
 import userContext from "../../context/userCtx";
 import FriendInvitationCard from "./FriendInvitationCard";
 
+import socket from "../../socket";
 import styles from "./Request.module.css";
 
 export default function Request() {
   const context = useContext(userContext);
   const [invitations, setInvitations] = useState([]);
+  const [hasChange, setHasChange] = useState(false);
+  const [dataSocket, setDataSocket] = useState(null);
+
+  const changeData = () => setHasChange((hasChange) => !hasChange);
+
+  // data socket
+  socket.on(context.id + "invitation", (data) => {
+    setDataSocket(data);
+  });
+
+  useEffect(() => {
+    if (dataSocket) {
+      changeData();
+    }
+  }, [dataSocket]);
 
   useEffect(async () => {
     try {
@@ -16,8 +32,10 @@ export default function Request() {
       setInvitations(invitations);
     } catch (error) {
       console.log(error);
+    } finally {
+      setDataSocket(null);
     }
-  }, []);
+  }, [hasChange]);
 
   return (
     <section>

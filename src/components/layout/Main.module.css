@@ -7,3 +7,12 @@
 
   position: relative;
 }
+
+.popupchat {
+  position: fixed;
+  bottom: 0;
+  right: 6rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}

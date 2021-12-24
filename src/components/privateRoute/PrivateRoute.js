@@ -15,7 +15,7 @@ export default function PrivateRoute(props) {
       const user = await response.json();
       context.setId(user._id);
       context.setAvatar(user.avatar);
-      context.setFullName(`${user.firstName} ${user.lastName}`);
+      context.setFullName(user.fullName);
     } catch (error) {
       console.log(error);
     }
