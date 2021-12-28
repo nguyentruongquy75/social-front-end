@@ -33,7 +33,8 @@
 }
 
 .card {
-  padding: 2rem;
-  background-color: var(--color-white);
+  background-color: transparent;
   margin-top: 1.2rem;
+
+  box-shadow: none;
 }

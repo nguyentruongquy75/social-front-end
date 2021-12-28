@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import userContext from "../../context/userCtx";
 import { Navigate } from "react-router-dom";
 import { API_user } from "../../config";
+import socket from "../../socket";
 
 export default function PrivateRoute(props) {
   const [isLoading, setIsLoading] = useState(false);
@@ -16,6 +17,8 @@ export default function PrivateRoute(props) {
       context.setId(user._id);
       context.setAvatar(user.avatar);
       context.setFullName(user.fullName);
+
+      socket.emit("online", userId);
     } catch (error) {
       console.log(error);
     }

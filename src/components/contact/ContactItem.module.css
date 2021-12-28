@@ -2,6 +2,26 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  padding: 0.4rem;
+  border-radius: 0.6rem;
+  animation: fadeIn 0.2s linear;
+}
+
+@keyframes fadeIn {
+  from {
+    transform: translateY(4px);
+    opacity: 0.5;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.contact-item:hover {
+  background-color: var(--color-gray-dark);
+  cursor: pointer;
 }
 
 .contact-item + .contact-item {
@@ -15,12 +35,13 @@
 
 .contact-item__info h6 {
   font-size: 1.3rem;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .contact-item__img {
-  width: var(--small-img-size);
-  height: var(--small-img-size);
+  --size: 2.8rem;
+  width: var(--size);
+  height: var(--size);
 
   margin-right: 1.2rem;
 }
@@ -33,7 +54,12 @@
 }
 
 .contact-item__icon {
-  font-size: 1.6rem;
+  --size: 1rem;
+  width: var(--size);
+  height: var(--size);
+
+  border-radius: 50%;
+  background-color: var(--color-green);
 }
 
 .contact-item__count {

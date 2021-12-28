@@ -1,5 +1,6 @@
 .card {
   position: absolute;
+  z-index: 1;
   top: calc(100% + 1.2rem);
   right: 0;
 
@@ -83,4 +84,14 @@
   height: 1px;
   background-color: var(--color-border);
   margin: 1.2rem 0;
+}
+
+@media (max-width: 500px) {
+  .user__img {
+    --size: 4rem;
+  }
+
+  .card {
+    width: 30rem;
+  }
 }

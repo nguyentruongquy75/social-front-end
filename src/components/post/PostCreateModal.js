@@ -183,7 +183,7 @@ export default function PostCreateModal(props) {
           </div>
 
           <div className={styles["button"]}>
-            <button ref={buttonRef} type="submit">
+            <button disabled ref={buttonRef} type="submit">
               {props.type === "edit" ? "Lưu" : "Đăng"}
             </button>
           </div>

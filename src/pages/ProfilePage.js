@@ -1,28 +1,37 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Route, Routes, useParams } from "react-router-dom";
 import Overlay from "../components/overlay/Overlay";
 import ProfileEdit from "../components/profile/ProfileEdit";
 
 import ProfileTab from "../components/profile/ProfileTab";
 import Button from "../components/ui/Button";
-import { API_user } from "../config";
+import { API_user, API_chat } from "../config";
 import userContext from "../context/userCtx";
+import { addPopupChat } from "../redux/updateSlice";
 
-import styles from "./ProfilePage.module.css";
+import Responsive from "../components/responsive/Responsive";
 import ProfilePageFriend from "./ProfilePageFriend";
 import ProfilePageHome from "./ProfilePageHome";
 import ProfilePageIntroduction from "./ProfilePageIntroduction";
 import ProfilePagePhoto from "./ProfilePagePhoto";
 
+import styles from "./ProfilePage.module.css";
+import Card from "../components/ui/Card";
+
 let isInitial = true;
 export default function ProfilePage(props) {
   const params = useParams();
   const context = useContext(userContext);
+  const dispatch = useDispatch();
   const [user, setUser] = useState(null);
   const isFriend = user && user.friends.find((item) => item._id === context.id);
 
   const [invitation, setInvitation] = useState(null);
   const [isSendedInvitation, setIsSendedInvitation] = useState(false);
+  const [isChat, setIsChat] = useState(false);
+  const [isDisplayFriendAction, setIsDisplayFriendAction] = useState(false);
+  const [isDeleteFriend, setIsDeleteFriend] = useState(false);
 
   // Profile Edit
   const [isDisplayProfileEdit, setIsDisplayProfileEdit] = useState(false);
@@ -35,6 +44,13 @@ export default function ProfilePage(props) {
     }
     setIsSendedInvitation((isSend) => !isSend);
   };
+
+  const chat = () => setIsChat(true);
+
+  const toggleDisplayFriendAction = () =>
+    setIsDisplayFriendAction((isDisplay) => !isDisplay);
+
+  const deleteFriend = () => setIsDeleteFriend(true);
 
   // fetch user
   useEffect(async () => {
@@ -54,6 +70,7 @@ export default function ProfilePage(props) {
     }
   }, [params]);
 
+  // send friend invitation
   useEffect(async () => {
     if (!isInitial) {
       if (isSendedInvitation) {
@@ -93,6 +110,58 @@ export default function ProfilePage(props) {
     }
   }, [user]);
 
+  // get chat room
+  useEffect(async () => {
+    if (isChat) {
+      try {
+        const response = await fetch(`${API_chat}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            type: "single",
+            participants: [context.id, user._id],
+          }),
+        });
+        const chatRoom = await response.json();
+
+        const friend =
+          chatRoom.type === "single"
+            ? chatRoom.participants.find((user) => user._id !== context.id)
+            : null;
+
+        const roomInfo = {
+          image: chatRoom.type === "single" ? friend.avatar : chatRoom.image,
+          name: chatRoom.type === "single" ? friend.fullName : chatRoom.name,
+          _id: chatRoom._id,
+          type: chatRoom.type,
+        };
+
+        dispatch(addPopupChat(roomInfo));
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsChat(false);
+      }
+    }
+  }, [isChat]);
+
+  // delete friend
+  useEffect(async () => {
+    if (isDeleteFriend) {
+      const response = await fetch(`${API_user}/${context.id}/friends`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          _id: user._id,
+        }),
+      });
+    }
+  }, [isDeleteFriend]);
+
   // css for display profile edit
   const profileEditRef = useRef();
   useEffect(() => {
@@ -131,7 +200,7 @@ export default function ProfilePage(props) {
 
                 {context.id !== user._id && (
                   <div className={styles["user__action"]}>
-                    {!isFriend && (
+                    {(!isFriend || isDeleteFriend) && (
                       <Button
                         onClick={toggleSendInvitation}
                         className={
@@ -142,14 +211,27 @@ export default function ProfilePage(props) {
                         {isSendedInvitation ? "Huỷ lời mời" : "Thêm bạn bè"}
                       </Button>
                     )}
-                    {isFriend && (
-                      <Button>
+                    {isFriend && !isDeleteFriend && (
+                      <Button
+                        onClick={toggleDisplayFriendAction}
+                        className={styles["friend__action"]}
+                      >
                         <i className="fas fa-user-check"></i>
                         Bạn bè
+                        {isDisplayFriendAction && (
+                          <Card className={styles["friend__action-modal"]}>
+                            <ul>
+                              <li onClick={deleteFriend}>
+                                <i className="fas fa-user-times"></i>
+                                Huỷ kết bạn
+                              </li>
+                            </ul>
+                          </Card>
+                        )}
                       </Button>
                     )}
 
-                    <Button className={styles["button--blue"]}>
+                    <Button onClick={chat} className={styles["button--blue"]}>
                       <i className="fab fa-facebook-messenger"></i>
                       Nhắn tin
                     </Button>
@@ -165,7 +247,9 @@ export default function ProfilePage(props) {
                 )}
               </div>
 
-              <ProfileTab />
+              <Responsive minWidth={500}>
+                <ProfileTab />
+              </Responsive>
             </div>
           </div>
           <div className={styles.wrapper}>

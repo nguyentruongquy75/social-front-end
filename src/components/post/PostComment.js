@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { API_post } from "../../config";
 
@@ -11,6 +11,7 @@ import socket from "../../socket";
 import styles from "./PostComment.module.css";
 
 export default function PostComment(props) {
+  const postCommentRef = useRef();
   const postId = props.postId;
   const postAuthId = props.postAuthId;
   const location = useLocation();
@@ -32,9 +33,38 @@ export default function PostComment(props) {
     }
   }, []);
 
+  // comment on mobile device
+  useEffect(() => {
+    if (window.innerWidth <= 500) {
+      let firstTouchY = 0;
+      const handleTouchStart = (e) => (firstTouchY = e.touches[0].pageY);
+      const handleTouchEnd = (e) => {
+        if (e.changedTouches[0].pageY > firstTouchY) {
+          postCommentRef.current.classList.add(styles["hide"]);
+          setTimeout(() => {
+            props.setIsDisplayComment(false);
+          }, 500);
+        }
+      };
+
+      document.addEventListener("touchstart", handleTouchStart);
+      document.addEventListener("touchend", handleTouchEnd);
+
+      return () => {
+        document.removeEventListener("touchstart", handleTouchStart);
+        document.removeEventListener("touchend", handleTouchEnd);
+        // postCommentRef.current.classList.remove(styles["hide"]);
+      };
+    }
+  }, []);
+
   return (
-    <div className={styles["post__comment"]}>
-      <CommentInput onCommentChange={props.changePostComment} postId={postId} />
+    <div ref={postCommentRef} className={styles["post__comment"]}>
+      <CommentInput
+        className={styles["comment__input--mobile"]}
+        onCommentChange={props.changePostComment}
+        postId={postId}
+      />
       <div className={styles["comment__list"]}>
         {/* {status === "loading" && (
           <div className={styles.loading}>

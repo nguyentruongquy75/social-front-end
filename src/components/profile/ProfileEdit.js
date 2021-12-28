@@ -119,7 +119,11 @@ const ProfileEdit = React.forwardRef((props, ref) => {
             <div
               className={`${styles["section__body"]} ${styles["section__body--center"]}`}
             >
-              <div ref={coverRef} className={styles.cover}></div>
+              <div ref={coverRef} className={styles.cover}>
+                <div className={styles["cover__image"]}>
+                  <img src={cover} alt={context.fullName} />
+                </div>
+              </div>
             </div>
           </section>
 

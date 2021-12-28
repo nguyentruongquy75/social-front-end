@@ -1,6 +1,8 @@
 .user-control {
   display: flex;
   position: relative;
+
+  margin: 0;
 }
 
 .user-control li {

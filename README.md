@@ -14,18 +14,16 @@
 
 ## Front end
 
-- Update reactions, comments post [best]
+- UI mobile:
 
-- invitation socket [ok]
+  - Chat
 
-- ux remove post [ok]
+  - Fix reactions of comment
 
-- update cover image
+- chat count, chat status
+
+- Improve UX
 
 ### Responsive
 
 ## Backend
-
-- Add chat [best] 
-
-- online offline

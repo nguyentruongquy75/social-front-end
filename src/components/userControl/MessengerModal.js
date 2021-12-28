@@ -6,7 +6,7 @@ import Card from "../ui/Card";
 
 import styles from "./MessengerModal.module.css";
 
-import { API_chat } from "../../config";
+import { API_chat, API_user } from "../../config";
 import userContext from "../../context/userCtx";
 
 const MessengerModal = React.forwardRef((props, ref) => {
@@ -54,6 +54,60 @@ const MessengerModal = React.forwardRef((props, ref) => {
       }
     }
   }, [isFetchResult]);
+
+  // mobile
+  useEffect(() => {
+    if (window.innerWidth <= 499) {
+      let firstTouchY = 0;
+      const handleTouchStart = (e) => (firstTouchY = e.touches[0].pageY);
+      const handleTouchMove = (e) => {
+        if (firstTouchY < e.touches[0].pageY) {
+          ref.current.style.transform = `translateY(${
+            e.touches[0].pageY - firstTouchY
+          }px)`;
+        }
+      };
+      const handleTouchEnd = (e) => {
+        if (firstTouchY < e.changedTouches[0].pageY) {
+          if (e.changedTouches[0].pageY - firstTouchY > 200) {
+            ref.current.style.transform = `translateY(100%)`;
+            setTimeout(() => {
+              props.hideMessengerModal();
+            }, 500);
+          } else {
+            ref.current.style.transform = `translateY(0)`;
+          }
+        }
+      };
+
+      document.addEventListener("touchstart", handleTouchStart);
+      document.addEventListener("touchmove", handleTouchMove);
+      document.addEventListener("touchend", handleTouchEnd);
+
+      return () => {
+        document.removeEventListener("touchstart", handleTouchStart);
+        document.removeEventListener("touchmove", handleTouchMove);
+        document.removeEventListener("touchend", handleTouchEnd);
+      };
+    }
+  }, []);
+
+  // read chat room
+  useEffect(async () => {
+    try {
+      const response = await fetch(`${API_user}/${context.id}/chatrooms`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      props.setUnreadCount(0);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
   return (
     <Card ref={ref} className={styles["card"]}>
       <h2>Chat</h2>

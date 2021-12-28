@@ -24,6 +24,8 @@
   border-radius: 50%;
   overflow: hidden;
   margin-right: 0.8rem;
+
+  flex-shrink: 0;
 }
 
 .comment__avatar img {
@@ -205,4 +207,20 @@
   font-size: 1.2rem;
   font-weight: 400;
   color: var(--color-text-secondary);
+}
+
+@media (max-width: 500px) {
+  .comment {
+    max-width: 80%;
+  }
+
+  .comment__info h6 {
+    margin: 0.6rem 0;
+  }
+
+  .comment__setting-modal {
+    right: 0;
+    left: unset;
+    transform: none;
+  }
 }

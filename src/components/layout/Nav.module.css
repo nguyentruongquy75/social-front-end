@@ -5,6 +5,10 @@
   margin-top: 2rem;
 }
 
+.card ul {
+  margin: 0;
+}
+
 .nav a {
   display: block;
   padding: 1.6rem 3rem;

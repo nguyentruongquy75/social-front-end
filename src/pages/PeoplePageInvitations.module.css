@@ -22,3 +22,23 @@
 .loading .spinner {
   --size: 3.6rem;
 }
+
+@media (max-width: 799px) {
+  .invitation__list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 499px) {
+  .invitation__list {
+    grid-template-columns: 1fr;
+  }
+
+  .loading {
+    position: static;
+    transform: none;
+
+    display: flex;
+    justify-content: center;
+  }
+}

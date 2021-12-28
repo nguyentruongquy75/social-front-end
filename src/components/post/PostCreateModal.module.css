@@ -7,6 +7,7 @@
 
   background-color: var(--color-white);
   width: 50rem;
+  max-width: 100%;
 }
 
 .loading {
@@ -100,7 +101,7 @@
 
 .input {
   margin-top: 2rem;
-  height: 20rem;
+  height: 15rem;
 
   overflow-y: scroll;
 }
@@ -222,6 +223,11 @@
   color: var(--color-yellow);
 }
 
+.additional__felling,
+.additional__tag {
+  display: none;
+}
+
 .button {
   margin-top: 2rem;
 }
@@ -239,4 +245,19 @@
 .button button:disabled {
   background-color: #e4e6eb;
   color: #aaa;
+}
+
+@media (max-width: 500px) {
+  .modal {
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+
+    transform: none;
+  }
+
+  .input textarea {
+    min-height: 10rem;
+  }
 }

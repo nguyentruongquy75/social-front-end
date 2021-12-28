@@ -42,7 +42,7 @@ export default function FriendInvitation(props) {
         <h6 className={styles.name}>{fullName}</h6>
 
         {status === "pending" && (
-          <>
+          <div className={styles["invitation__actions"]}>
             <Button
               onClick={accept}
               className={`${styles.button} ${styles["button--blue"]}`}
@@ -52,7 +52,7 @@ export default function FriendInvitation(props) {
             <Button onClick={reject} className={styles.button}>
               Xoá
             </Button>
-          </>
+          </div>
         )}
 
         {status === "accepted" && (

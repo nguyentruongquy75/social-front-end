@@ -148,3 +148,20 @@
 .messenger__video-action--active {
   background-color: var(--color-white);
 }
+
+@media (max-width: 499px) {
+  .card {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+
+    z-index: 10001;
+    width: unset;
+  }
+
+  .messenger__video {
+    min-height: 100%;
+  }
+}

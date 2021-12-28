@@ -1,11 +1,12 @@
 .main {
   background-color: var(--color-background);
   padding-top: var(--header-height);
-  padding-bottom: 2rem;
 
   min-height: 100vh;
 
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .popupchat {
@@ -15,4 +16,11 @@
   display: flex;
   gap: 1rem;
   justify-content: flex-end;
+  z-index: 1000;
+}
+
+@media (max-width: 499px) {
+  .main {
+    padding-top: 10rem;
+  }
 }

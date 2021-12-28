@@ -55,7 +55,7 @@
 }
 
 .message__list {
-  padding: 5.4rem 0.6rem 6rem;
+  padding: 5.4rem 0.6rem 7rem;
   max-height: 46rem;
   overflow-y: scroll;
   position: relative;
@@ -136,4 +136,44 @@
   top: 5.6rem;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.seen {
+  --size: 1.4rem;
+  width: var(--size);
+  height: var(--size);
+  /* display: none; */
+
+  position: absolute;
+  right: 1rem;
+  top: 5rem;
+  transition: all 0.5s ease-out;
+  transform: translateY(-100%);
+}
+
+.seen img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+@media (max-width: 499px) {
+  .card {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+
+    width: unset;
+    height: unset;
+
+    z-index: 10001;
+  }
+
+  .message__list {
+    padding-bottom: 0;
+  }
 }

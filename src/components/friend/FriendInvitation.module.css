@@ -46,3 +46,35 @@
   cursor: default;
   color: var(--color-gray);
 }
+
+@media (max-width: 499px) {
+  .card {
+    display: flex;
+    align-content: center;
+    box-shadow: none;
+  }
+
+  .invitation__image {
+    --size: 10rem;
+    width: var(--size);
+    height: var(--size);
+  }
+
+  .invitation__image img {
+    border-radius: 50%;
+  }
+
+  .invitation__info {
+    flex: 1;
+  }
+
+  .invitation__actions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.2rem;
+  }
+
+  .button {
+    display: inline-block;
+  }
+}

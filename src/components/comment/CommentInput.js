@@ -16,6 +16,8 @@ export default function CommentInput(props) {
     }
   };
 
+  const sendComment = () => setIsSendComment(true);
+
   useEffect(async () => {
     if (isSendComment) {
       try {
@@ -65,7 +67,11 @@ export default function CommentInput(props) {
   }, []);
 
   return (
-    <div className={styles["comment__input"]}>
+    <div
+      className={`${styles["comment__input"]} ${
+        props.className ? props.className : ""
+      }`}
+    >
       <div className={styles.avatar}>
         <img src={context.avatar} alt={context.fullName} />
       </div>
@@ -81,6 +87,9 @@ export default function CommentInput(props) {
           type="text"
           placeholder="Viết bình luận ..."
         />
+        <div onClick={sendComment} className={styles["send"]}>
+          <i className="fas fa-paper-plane"></i>
+        </div>
       </div>
     </div>
   );

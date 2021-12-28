@@ -28,6 +28,7 @@ export default function ChatRoom(props) {
     fetchStatus: "initial",
     isFetchPagination: false,
   });
+  const [lastMessages, setLastMessages] = useState([]);
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -149,6 +150,74 @@ export default function ChatRoom(props) {
     }
   }, [dataSocket, pagination.limit]);
 
+  // read message
+
+  useEffect(async () => {
+    try {
+      const response = await fetch(`${API_chat}/${room._id}/messages`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: context.id,
+        }),
+      });
+
+      const test = await response.json();
+
+      console.log(test);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [dataSocket]);
+
+  // get last seen message
+  const seenRef = useRef();
+  useEffect(() => {
+    const newSeenMessage = messages
+      .filter(
+        (mess) =>
+          mess.seen && mess.seen.length > 0 && mess.user._id === context.id
+      )
+      .pop();
+
+    if (newSeenMessage) {
+      if (
+        messages.findIndex((mess) => mess._id === newSeenMessage._id) ===
+        messages.length - 1
+      ) {
+        const newSeenMessageElement = document.querySelector(
+          `div[data-id='${newSeenMessage._id}']`
+        );
+        console.log(newSeenMessageElement.clientHeight);
+        seenRef.current.style.top =
+          newSeenMessageElement.offsetTop +
+          newSeenMessageElement.clientHeight +
+          "px";
+      }
+    }
+  }, [messages]);
+
+  // get message have avatar
+  useEffect(() => {
+    const lastMessages = [];
+    for (let index = 0; index < messages.length; index++) {
+      const currentMessage = messages[index];
+      const nextMessage = messages[index + 1];
+
+      if (currentMessage.user._id !== context.id) {
+        if (nextMessage && currentMessage.user._id !== nextMessage.user._id) {
+          lastMessages.push(currentMessage._id);
+        } else if (!nextMessage) {
+          lastMessages.push(currentMessage._id);
+        }
+      }
+
+      setLastMessages(lastMessages);
+    }
+  }, [messages]);
+
   return (
     <>
       <Card className={styles["card"]}>
@@ -171,9 +240,21 @@ export default function ChatRoom(props) {
             </div>
           )}
 
-          {messages.map((message) => (
-            <Message key={message._id} message={message} chatRoomInfo={room} />
-          ))}
+          {messages.map((message) => {
+            return (
+              <Message
+                key={message._id}
+                isSeen={message.seen && message.seen.length > 0}
+                message={message}
+                chatRoomInfo={room}
+                isDisplayAvatar={lastMessages.includes(message._id)}
+              />
+            );
+          })}
+
+          <div ref={seenRef} className={styles["seen"]}>
+            <img src={room.image} alt="" />
+          </div>
         </div>
 
         <div className={styles["card__bottom"]}>

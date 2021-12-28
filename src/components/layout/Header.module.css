@@ -20,4 +20,97 @@
 .header__group {
   display: flex;
   align-items: center;
+  height: 100%;
+}
+
+.header__top-mobile {
+  transition: all 0.1s ease;
+}
+
+.header__top-mobile li {
+  list-style: none;
+}
+
+.user__mobile,
+.setting__mobile {
+  display: none;
+}
+
+.user__mobile a,
+.setting__mobile li {
+  --size: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: var(--size);
+  height: var(--size);
+
+  background-color: var(--color-gray-light);
+  color: inherit;
+  font-size: 1.8rem;
+
+  border-radius: 50%;
+
+  margin-left: 0.8rem;
+}
+
+.nav__mobile {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+
+  display: none;
+}
+
+.nav__tablet {
+  display: none;
+}
+
+@media (max-width: 1199px) {
+  .nav__tablet {
+    display: block;
+  }
+}
+
+@media (max-width: 700px) {
+  .nav__tablet {
+    display: none;
+  }
+}
+
+@media (max-width: 499px) {
+  .header__container {
+    flex-direction: column;
+    height: auto;
+    align-items: flex-start;
+  }
+
+  .header__top-mobile {
+    width: 100%;
+    padding: 0.8rem 0;
+  }
+
+  .user__mobile,
+  .setting__mobile {
+    display: block;
+  }
+
+  .hide__mobile {
+    display: none;
+  }
+
+  .search__mobile {
+    margin-left: auto;
+  }
+
+  .nav__mobile {
+    display: flex;
+  }
+
+  .setting__mobile {
+    position: relative;
+  }
 }

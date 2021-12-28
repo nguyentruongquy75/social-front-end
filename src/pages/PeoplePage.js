@@ -36,10 +36,12 @@ export default function PeoplePage() {
           </li>
         </ul>
       </aside>
-      <Routes>
-        <Route path="/invitations" element={<PeoplePageInvitations />} />
-        <Route path="/friends" element={<PeoplePageFriends />} />
-      </Routes>
+      <div className={styles.body}>
+        <Routes>
+          <Route path="/invitations" element={<PeoplePageInvitations />} />
+          <Route path="/friends" element={<PeoplePageFriends />} />
+        </Routes>
+      </div>
     </div>
   );
 }

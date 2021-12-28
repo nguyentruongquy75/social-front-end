@@ -335,6 +335,7 @@ export default function Post(props) {
             postAuthId={post.user._id}
             postId={post._id}
             onCommentChange={changePostComment}
+            setIsDisplayComment={setIsDisplayComment}
           />
         )}
       </Card>

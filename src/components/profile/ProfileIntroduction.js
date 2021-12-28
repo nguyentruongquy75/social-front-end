@@ -22,6 +22,12 @@ export default function ProfileIntroduction(props) {
       <h4 className={styles.heading}>Giới thiệu</h4>
 
       <ul className={styles["introduction__list"]}>
+        {user.cover && (
+          <li className={styles["bio"]}>
+            <div>{user.bio}</div>
+          </li>
+        )}
+
         {user.address && (
           <li>
             <div className={styles["introduction__icon"]}>

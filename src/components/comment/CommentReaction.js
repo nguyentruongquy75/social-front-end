@@ -35,15 +35,14 @@ export default function CommentReaction(props) {
   }, [reactionSocket]);
 
   const getTwoMostReactions = (reactions) => {
-    const uniqueReaction = new Set(reactions);
-
+    const uniqueReaction = new Set(reactions.map((item) => item.type));
     const result = Array.from(uniqueReaction).map((reaction) => {
       const reactionCount = reactions.filter(
-        (item) => item.type === reaction.type
+        (item) => item.type === reaction
       ).length;
 
       return {
-        type: reaction.type,
+        type: reaction,
         count: reactionCount,
       };
     });

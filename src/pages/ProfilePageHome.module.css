@@ -22,3 +22,20 @@
   justify-content: center;
   color: #999;
 }
+
+@media (max-width: 907px) {
+  .container {
+    display: flex;
+    flex-direction: column;
+    width: 50rem;
+    max-width: 100%;
+
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 499px) {
+  .container {
+    padding: 0;
+  }
+}

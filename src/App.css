@@ -25,17 +25,19 @@
   --color-yellow: rgb(255, 193, 2);
 
   --color-text-secondary: #65676b;
-  --header-height: 7rem;
+  --header-height: 5.6rem;
 }
 
 html {
   font-size: 62.5%;
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
   box-sizing: border-box;
   font-family: "Be Vietnam Pro", sans-serif !important;
+  overflow-x: hidden;
 }
 
 ul {

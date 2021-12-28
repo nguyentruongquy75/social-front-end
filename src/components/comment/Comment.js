@@ -209,7 +209,6 @@ function Comment(props) {
 
   // remove comment
   useEffect(async () => {
-    console.log(comment);
     if (isRemoveComment) {
       try {
         const response = await fetch(

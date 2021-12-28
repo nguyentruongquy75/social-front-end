@@ -114,3 +114,10 @@
 .post__info-right span + span {
   margin-left: 0.4rem;
 }
+
+@media (max-width: 500px) {
+  .card {
+    border-radius: 0;
+    margin-top: 1rem;
+  }
+}

@@ -7,6 +7,10 @@
   justify-content: space-between;
 }
 
+.card a {
+  color: inherit;
+}
+
 .user {
   display: flex;
   gap: 1.8rem;
@@ -51,4 +55,29 @@
 .expand:hover {
   cursor: pointer;
   background-color: #f0f2f5;
+}
+
+@media (max-width: 899px) {
+  .card {
+    padding: 1.2rem;
+  }
+
+  .user__image {
+    --size: 3.6rem;
+  }
+}
+
+@media (max-width: 500px) {
+  .card {
+    box-shadow: none;
+    padding: 0.8rem;
+  }
+
+  .user__image {
+    --size: 6rem;
+  }
+
+  .user__image img {
+    border-radius: 50%;
+  }
 }

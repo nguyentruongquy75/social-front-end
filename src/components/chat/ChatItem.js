@@ -49,15 +49,15 @@ export default function ChatItem(props) {
   // click on chat item
   const handleClickOnChatItem = (e) => {
     dispatch(addPopupChat(roomInfo));
-    props.hideMessengerModal();
+    window.innerWidth >= 500 && props.hideMessengerModal();
   };
 
   const getStatus = () => {
     if (room.lastMessage) {
       if (room.lastMessage.user === context.id) {
-        return room.lastMessage.isSeen ? "seen" : "unseen";
+        return room.lastMessage.seen.length > 0 ? "seen" : "unseen";
       } else {
-        return room.lastMessage.isSeen ? "" : "unread";
+        return room.lastMessage.seen.length > 0 ? "" : "unread";
       }
     }
 
@@ -91,6 +91,9 @@ export default function ChatItem(props) {
           )}
         </div>
         <div className={styles["chat__icon"]}>
+          <div className={styles.seen}>
+            <img src={roomInfo.image} alt={roomInfo.name} />
+          </div>
           <div className={styles.check}>
             <i className="fas fa-check-circle"></i>
           </div>

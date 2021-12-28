@@ -93,3 +93,21 @@
 .result__list::-webkit-scrollbar-thumb {
   background-color: #bcc0c4;
 }
+
+@media (max-width: 499px) {
+  .card {
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: unset;
+    height: unset;
+    transition: transform 0.1s ease;
+  }
+
+  .search input {
+    font-size: 1.4rem;
+  }
+}

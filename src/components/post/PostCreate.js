@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import Card from "../ui/Card";
 import PostCreateModal from "./PostCreateModal";
 
 import styles from "./PostCreate.module.css";
 import Overlay from "../overlay/Overlay";
+import userContext from "../../context/userCtx";
 
 export default function PostCreate(props) {
+  const context = useContext(userContext);
   const [isDisplayModal, setIsDisplayModal] = useState(false);
 
   const displayModal = () => setIsDisplayModal(true);
@@ -31,7 +33,10 @@ export default function PostCreate(props) {
           <i className="far fa-edit"></i>
           Create Post
         </h6>
-        <div>
+        <div className={styles["input__container"]}>
+          <div className={styles["user__avatar"]}>
+            <img src={context.avatar} alt={context.fullName} />
+          </div>
           <div className={styles.input} onClick={displayModal}>
             <textarea placeholder="What's on your mind, Quy?" />
           </div>

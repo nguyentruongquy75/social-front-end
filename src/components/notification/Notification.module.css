@@ -100,3 +100,30 @@
 
   object-fit: cover;
 }
+
+@media (max-width: 500px) {
+  .notification {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .notification__img {
+    --size: 4rem;
+  }
+
+  .notification__type {
+    --size: 1.6rem;
+    bottom: 1rem;
+  }
+
+  .notification__type.notification__type--comment {
+    font-size: 1rem;
+  }
+
+  .notification.notification.unread {
+    background-color: var(--color-gray-light);
+  }
+
+  .notification__title {
+    margin: 0;
+  }
+}

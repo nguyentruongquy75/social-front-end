@@ -37,6 +37,17 @@
   font-size: 1.5rem;
 }
 
+.send {
+  display: none;
+  padding: 1.2rem;
+}
+
+.send i {
+  font-size: 1.8rem;
+  transform: rotate(64deg);
+  color: var(--color-blue);
+}
+
 .loading {
   position: absolute;
   top: 0;
@@ -48,4 +59,16 @@
   align-items: center;
   justify-content: center;
   background: rgba(250, 250, 250, 0.5);
+}
+
+@media (max-width: 500px) {
+  .comment__input-container {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+  }
+
+  .send {
+    display: block;
+  }
 }

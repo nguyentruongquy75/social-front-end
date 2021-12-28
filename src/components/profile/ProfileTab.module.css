@@ -51,3 +51,9 @@
   height: 3px;
   background-color: var(--color-blue);
 }
+
+@media (max-width: 899px) {
+  .profile-tab a {
+    font-size: 1.5rem;
+  }
+}

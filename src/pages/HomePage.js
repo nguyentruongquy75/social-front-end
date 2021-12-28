@@ -48,17 +48,17 @@ export default function HomePage() {
 
   return (
     <Wrapper className={styles.wrapper}>
-      <aside>
+      <aside className={styles["sidebar__left"]}>
         <ProfileCard />
         <Nav />
       </aside>
 
-      <div>
+      <div className={styles.body}>
         <PostCreate onChange={changeNewsfeed} />
         <PostList status={status} list={newsfeed} />
       </div>
 
-      <aside>
+      <aside className={styles["sidebar__right"]}>
         <Request />
         <Contact />
       </aside>

@@ -6,9 +6,11 @@ import Button from "../ui/Button";
 
 import styles from "./Search.module.css";
 
-export default function Search() {
+export default function Search(props) {
   const location = useLocation();
   const inputRef = useRef();
+  const modalRef = useRef();
+  const [isDisplaySearchModal, setIsDisplaySearchModal] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [result, setResult] = useState([]);
   const [status, setStatus] = useState("initial");
@@ -17,6 +19,15 @@ export default function Search() {
   const resultClickHandler = (e) => {
     e.preventDefault();
     setInputValue("");
+  };
+
+  const displaySearchModal = () => setIsDisplaySearchModal(true);
+  const hideSearchModal = () => setIsDisplaySearchModal(false);
+
+  const handleClickOutside = (e) => {
+    if (modalRef.current && !modalRef.current.contains(e.target)) {
+      hideSearchModal();
+    }
   };
 
   useEffect(() => {
@@ -42,29 +53,54 @@ export default function Search() {
   // blur input when change link
   useEffect(() => {
     if (status !== "initial") {
-      inputRef.current.blur();
+      hideSearchModal();
     }
   }, [location.pathname]);
 
-  return (
-    <div>
-      <div className={styles["search-input"]}>
-        <input
-          onChange={inputChangeHandler}
-          type="text"
-          value={inputValue}
-          placeholder="Search"
-          ref={inputRef}
-        />
-        <Button>
-          <i className="fas fa-search"></i>
-        </Button>
+  // click outside
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
 
-        {status !== "initial" && (
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  });
+
+  // display search modal on mobile
+  useEffect(() => {
+    if (window.innerWidth <= 500) {
+      isDisplaySearchModal && (document.body.style.overflow = "hidden");
+      !isDisplaySearchModal && (document.body.style.overflow = null);
+    }
+  }, [isDisplaySearchModal]);
+
+  return (
+    <>
+      <Button
+        onClick={displaySearchModal}
+        className={`${styles["search__button"]} ${
+          props.className ? props.className : ""
+        }`}
+      >
+        <i className="fas fa-search"></i>
+      </Button>
+      {isDisplaySearchModal && (
+        <div ref={modalRef} className={styles["search__modal"]}>
+          <div className={styles["search-input"]}>
+            <Button onClick={hideSearchModal} className={styles.back}>
+              <i className="fas fa-arrow-left"></i>
+            </Button>
+            <input
+              onChange={inputChangeHandler}
+              type="text"
+              value={inputValue}
+              placeholder="Search"
+              ref={inputRef}
+            />
+          </div>
           <div
             onMouseDown={resultClickHandler}
             className={styles["search__result"]}
           >
+            <h4>Kết quả tìm kiếm</h4>
             <ul>
               {status === "loading" && (
                 <div className={styles.loading}>
@@ -77,7 +113,7 @@ export default function Search() {
               )}
 
               {status === "finished" &&
-                result.slice(0, 5).map((item) => (
+                result.slice(0, 8).map((item) => (
                   <li key={item._id}>
                     <Link
                       className={styles["search__result-item"]}
@@ -95,8 +131,8 @@ export default function Search() {
                 ))}
             </ul>
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+      )}
+    </>
   );
 }

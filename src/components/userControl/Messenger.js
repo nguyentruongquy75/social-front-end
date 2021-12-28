@@ -4,6 +4,7 @@ import ChatRoom from "../chat/ChatRoom";
 import MessengerModal from "./MessengerModal";
 
 import userContext from "../../context/userCtx";
+import socket from "../../socket";
 export default function Messenger(props) {
   const context = useContext(userContext);
   const modalRef = useRef();
@@ -14,7 +15,8 @@ export default function Messenger(props) {
     chatRoom: null,
   });
   const [chatRooms, setChatRooms] = useState([]);
-  const unreadCount = chatRooms.filter((item) => !item.isRead).length;
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [dataSocket, setDataSocket] = useState(null);
 
   // messenger modal
   const toggleDisplayMessengerModal = () =>
@@ -26,7 +28,7 @@ export default function Messenger(props) {
       !modalRef.current.contains(e.target) &&
       !buttonRef.current.contains(e.target)
     ) {
-      hideMessengerModal();
+      window.innerWidth >= 500 && hideMessengerModal();
     }
   };
 
@@ -56,12 +58,22 @@ export default function Messenger(props) {
       const chatRooms = await reponse.json();
 
       setChatRooms(chatRooms);
-
-      console.log(chatRooms);
     } catch (error) {
       console.log(error);
+    } finally {
+      setDataSocket(null);
     }
-  }, []);
+  }, [dataSocket]);
+
+  socket.on(`${context.id}chatrooms`, (data) => {
+    setDataSocket(data);
+  });
+
+  // get unread count
+  useEffect(() => {
+    const unreadCount = chatRooms.filter((item) => !item.isRead).length;
+    setUnreadCount(unreadCount);
+  }, [chatRooms]);
 
   // click out
   useEffect(() => {
@@ -78,11 +90,12 @@ export default function Messenger(props) {
         onClick={toggleDisplayMessengerModal}
       >
         <i className="fab fa-facebook-messenger"></i>
-        <div className={props.count}>{unreadCount}</div>
+        {unreadCount > 0 && <div className={props.count}>{unreadCount}</div>}
       </li>
       {isDisplayMessengerModal && (
         <MessengerModal
           setDataChatRoomModal={setDataChatRoomModal}
+          setUnreadCount={setUnreadCount}
           hideMessengerModal={hideMessengerModal}
           chatRooms={chatRooms}
           ref={modalRef}
