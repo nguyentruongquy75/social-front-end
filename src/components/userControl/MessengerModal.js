@@ -136,7 +136,6 @@ const MessengerModal = React.forwardRef((props, ref) => {
         <div className={styles["chat__list"]}>
           {chatRooms.map((room) => (
             <ChatItem
-              setDataChatRoomModal={props.setDataChatRoomModal}
               hideMessengerModal={props.hideMessengerModal}
               room={room}
               key={room._id}
@@ -148,7 +147,6 @@ const MessengerModal = React.forwardRef((props, ref) => {
         <div className={styles["result__list"]}>
           {searchResult.map((result) => (
             <MessengerResultItem
-              setDataChatRoomModal={props.setDataChatRoomModal}
               hideMessengerModal={props.hideMessengerModal}
               key={result._id}
               result={result}

@@ -17,6 +17,12 @@
   justify-content: center;
   color: #bec2c9;
   border-radius: 50%;
+
+  cursor: pointer;
+}
+
+.card__actions div:last-child {
+  grid-column: 4/5;
 }
 
 .card__actions div:hover {

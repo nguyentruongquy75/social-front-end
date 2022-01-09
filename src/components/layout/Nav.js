@@ -29,7 +29,7 @@ export default function Nav() {
           </NavLink>
         </li>
 
-        <li>
+        {/* <li>
           <NavLink
             to="/profile/photo"
             className={({ isActive }) => (isActive ? styles.active : "")}
@@ -37,7 +37,7 @@ export default function Nav() {
             <i className="far fa-image"></i>
             Photos
           </NavLink>
-        </li>
+        </li> */}
 
         <li>
           <NavLink

@@ -38,7 +38,7 @@ export default function Contact() {
 
       {contacts.length > 0 && (
         <Card className={styles.card}>
-          {contacts.map((contact) => (
+          {contacts.slice(0, 20).map((contact) => (
             <ContactItem key={contact._id} contact={contact} />
           ))}
         </Card>

@@ -47,9 +47,9 @@ export default function ChatRoomActions(props) {
       <div onClick={callVoice}>
         <i className="fas fa-phone"></i>
       </div>
-      <div>
+      {/* <div>
         <i className="fas fa-minus"></i>
-      </div>
+      </div> */}
       <div onClick={closeChatRoom}>
         <i className="fas fa-times"></i>
       </div>

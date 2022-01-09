@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import Helmet from "react-helmet";
 
 import Contact from "../components/contact/Contact";
 import Nav from "../components/layout/Nav";
@@ -47,21 +48,26 @@ export default function HomePage() {
   }, [context, hasChangeNewsfeed]);
 
   return (
-    <Wrapper className={styles.wrapper}>
-      <aside className={styles["sidebar__left"]}>
-        <ProfileCard />
-        <Nav />
-      </aside>
+    <>
+      <Helmet>
+        <title>Meta</title>
+      </Helmet>
+      <Wrapper className={styles.wrapper}>
+        <aside className={styles["sidebar__left"]}>
+          <ProfileCard />
+          <Nav />
+        </aside>
 
-      <div className={styles.body}>
-        <PostCreate onChange={changeNewsfeed} />
-        <PostList status={status} list={newsfeed} />
-      </div>
+        <div className={styles.body}>
+          <PostCreate onChange={changeNewsfeed} />
+          <PostList status={status} list={newsfeed} />
+        </div>
 
-      <aside className={styles["sidebar__right"]}>
-        <Request />
-        <Contact />
-      </aside>
-    </Wrapper>
+        <aside className={styles["sidebar__right"]}>
+          <Request />
+          <Contact />
+        </aside>
+      </Wrapper>
+    </>
   );
 }

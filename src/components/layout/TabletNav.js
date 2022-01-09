@@ -28,7 +28,7 @@ export default function TabletNav() {
 
         <li>
           <NavLink
-            to="/profile"
+            to="/profile/"
             className={({ isActive }) => (isActive ? styles.active : "")}
           >
             <i className="far fa-user"></i>

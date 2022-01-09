@@ -1,3 +1,7 @@
+.container {
+  position: relative;
+}
+
 .form__input {
   margin-bottom: 1.4rem;
 }
@@ -35,4 +39,18 @@
   font-size: 1.5rem;
   background-color: var(--color-green);
   color: var(--color-white);
+}
+
+.loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: rgba(255, 255, 255, 0.5);
 }

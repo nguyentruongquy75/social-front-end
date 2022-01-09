@@ -7,7 +7,15 @@
 
   background-color: var(--color-white);
   padding: 1.2rem;
-  overflow: hidden;
+  overflow-y: scroll;
+}
+
+.card::-webkit-scrollbar {
+  width: 6px;
+}
+
+.card::-webkit-scrollbar-thumb {
+  background-color: #aaa;
 }
 
 .card h2 {

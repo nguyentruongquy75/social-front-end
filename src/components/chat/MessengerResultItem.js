@@ -1,12 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { API_chat } from "../../config";
 import userContext from "../../context/userCtx";
+import { addPopupChat } from "../../redux/updateSlice";
+
 import styles from "./MessengerResultItem.module.css";
 export default function MessengerResultItem(props) {
   const context = useContext(userContext);
   const result = props.result;
   const [isClickOnResult, setIsClickOnResult] = useState(false);
   const participants = result.account ? [context.id, result._id] : [];
+  const dispatch = useDispatch();
 
   // const roomInfo = {
   //   image: room.type === "single" ? friend.avatar : room.image,
@@ -37,11 +41,13 @@ export default function MessengerResultItem(props) {
           chatRoom.type === "single"
             ? chatRoom.participants.find((user) => user._id !== context.id)
             : null;
-        props.setDataChatRoomModal({
-          image: chatRoom.type === "single" ? friend.avatar : chatRoom.image,
-          name: chatRoom.type === "single" ? friend.fullName : chatRoom.name,
-          _id: chatRoom._id,
-        });
+        dispatch(
+          addPopupChat({
+            image: chatRoom.type === "single" ? friend.avatar : chatRoom.image,
+            name: chatRoom.type === "single" ? friend.fullName : chatRoom.name,
+            _id: chatRoom._id,
+          })
+        );
       } catch (error) {
         console.log(error);
       } finally {

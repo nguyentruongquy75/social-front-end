@@ -8,7 +8,7 @@ export default function SmallFriendCard(props) {
   const friend = props.friend;
   const fullName = `${friend.lastName} ${friend.firstName}`;
   return (
-    <Link to={`/${friend._id}/profile`}>
+    <Link to={`/${friend._id}/profile/`}>
       <div className={styles["friend__avatar"]}>
         <img src={friend.avatar} alt={fullName} />
       </div>

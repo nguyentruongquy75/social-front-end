@@ -1,14 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
+import Helmet from "react-helmet";
 import { Link, useNavigate } from "react-router-dom";
 
 import { API_login } from "../../config";
 
 import FormInput from "./FormInput";
+import Spinner from "../spinner/Spinner";
 
 import styles from "./SignInForm.module.css";
 
 export default function SignInForm() {
   const [isFormValid, setIsFormvalid] = useState(false);
+  const [status, setStatus] = useState("initial");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState(null);
@@ -33,6 +36,7 @@ export default function SignInForm() {
   useEffect(async () => {
     if (isFormValid) {
       try {
+        setStatus("loading");
         const response = await fetch(API_login, {
           method: "POST",
           headers: {
@@ -57,44 +61,57 @@ export default function SignInForm() {
         setIsFormvalid(false);
       } catch (error) {
         console.log(error);
+      } finally {
+        setStatus("finished");
       }
     }
   }, [isFormValid]);
 
   return (
-    <div>
-      <form onSubmit={formSubmitHandler}>
-        <FormInput
-          onValidate={validateUsername}
-          className={styles["form__input"]}
-          placeholder="Username"
-          message={message || "Username cannot blank"}
-          name="username"
-          setValue={setUsername}
-          isError={isError}
-        />
-        <FormInput
-          className={styles["form__input"]}
-          name="password"
-          placeholder="Password"
-          type="password"
-          onValidate={validatePassword}
-          message="Password length must be greater than 6 character"
-          setValue={setPassword}
-        />
+    <>
+      <Helmet>
+        <title>Đăng nhập</title>
+      </Helmet>
+      <div className={styles.container}>
+        <form onSubmit={formSubmitHandler}>
+          <FormInput
+            onValidate={validateUsername}
+            className={styles["form__input"]}
+            placeholder="Username"
+            message={message || "Username cannot blank"}
+            name="username"
+            setValue={setUsername}
+            isError={isError}
+          />
+          <FormInput
+            className={styles["form__input"]}
+            name="password"
+            placeholder="Password"
+            type="password"
+            onValidate={validatePassword}
+            message="Password length must be greater than 6 character"
+            setValue={setPassword}
+          />
 
-        <div className={styles.submit}>
-          <button type="submit">Login</button>
-        </div>
+          <div className={styles.submit}>
+            <button type="submit">Login</button>
+          </div>
 
-        <div className={styles.divider}></div>
+          <div className={styles.divider}></div>
 
-        <div className={styles.register}>
-          <Link to="/auth/register">
-            <button type="button">Create a profile</button>
-          </Link>
-        </div>
-      </form>
-    </div>
+          <div className={styles.register}>
+            <Link to="/auth/register">
+              <button type="button">Create a profile</button>
+            </Link>
+          </div>
+        </form>
+
+        {status === "loading" && (
+          <div className={styles.loading}>
+            <Spinner />
+          </div>
+        )}
+      </div>
+    </>
   );
 }

@@ -44,12 +44,6 @@ export default function Messenger(props) {
       isDisplay: false,
     }));
 
-  const setDataChatRoomModal = (data) =>
-    setChatRoomModal((prev) => ({
-      chatRoom: data,
-      isDisplay: true,
-    }));
-
   // fetch api
   useEffect(async () => {
     try {
@@ -94,7 +88,6 @@ export default function Messenger(props) {
       </li>
       {isDisplayMessengerModal && (
         <MessengerModal
-          setDataChatRoomModal={setDataChatRoomModal}
           setUnreadCount={setUnreadCount}
           hideMessengerModal={hideMessengerModal}
           chatRooms={chatRooms}

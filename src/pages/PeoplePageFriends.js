@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import Helmet from "react-helmet";
 import BigFriendCard from "../components/friend/BigFriendCard";
 import Spinner from "../components/spinner/Spinner";
 import { API_user } from "../config";
@@ -25,20 +26,25 @@ export default function PeoplePageFriends() {
   }, [context]);
 
   return (
-    <div className={styles.container}>
-      <h3 className={styles["friend__heading"]}>Bạn bè</h3>
-      <div className={styles["friend__list"]}>
-        {status === "loading" && (
-          <div className={styles.loading}>
-            <Spinner className={styles.spinner} />
-          </div>
-        )}
+    <>
+      <Helmet>
+        <title>Bạn bè</title>
+      </Helmet>
+      <div className={styles.container}>
+        <h3 className={styles["friend__heading"]}>Bạn bè</h3>
+        <div className={styles["friend__list"]}>
+          {status === "loading" && (
+            <div className={styles.loading}>
+              <Spinner className={styles.spinner} />
+            </div>
+          )}
 
-        {status === "finished" &&
-          friends.map((friend) => (
-            <BigFriendCard key={friend._id} friend={friend} />
-          ))}
+          {status === "finished" &&
+            friends.map((friend) => (
+              <BigFriendCard key={friend._id} friend={friend} />
+            ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

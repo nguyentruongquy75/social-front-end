@@ -165,8 +165,6 @@ export default function ChatRoom(props) {
       });
 
       const test = await response.json();
-
-      console.log(test);
     } catch (error) {
       console.log(error);
     }

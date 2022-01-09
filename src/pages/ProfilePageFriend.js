@@ -11,12 +11,12 @@ export default function ProfilePageFriend(props) {
         <div className={styles["card__top"]}>
           <h4 className={styles.heading}>Bạn bè</h4>
 
-          <div className={styles.search}>
+          {/* <div className={styles.search}>
             <div className={styles["search__icon"]}>
               <i className="fas fa-search"></i>
             </div>
             <input type="text" placeholder="Tìm kiếm" />
-          </div>
+          </div> */}
         </div>
 
         <div className={styles["friend__list"]}>

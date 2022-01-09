@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Helmet from "react-helmet";
 import { Link, useNavigate } from "react-router-dom";
 
 import DateSelection from "../dateSelection/DateSelection";
@@ -10,6 +11,7 @@ import SmallButton from "../ui/SmallButton";
 import styles from "./RegisterForm.module.css";
 
 import { API_register } from "../../config";
+import Spinner from "../spinner/Spinner";
 
 let isInitial = true;
 
@@ -31,6 +33,7 @@ export default function RegisterForm() {
     sex: "male",
   });
   const [message, setMessage] = useState(null);
+  const [status, setStatus] = useState("initial");
 
   const validatePassword = (password) => password.trim().length > 6;
   const validateBlank = (value) => value.trim() !== "";
@@ -65,6 +68,7 @@ export default function RegisterForm() {
       isValid.password
     ) {
       try {
+        setStatus("loading");
         const response = await fetch(API_register, {
           method: "POST",
           headers: {
@@ -85,74 +89,87 @@ export default function RegisterForm() {
         }
       } catch (error) {
         console.log(error);
+      } finally {
+        setStatus("finished");
       }
     }
   }, [isValid]);
 
   return (
-    <div>
-      <div className={styles["form__top"]}>
-        <h4>Tạo tài khoản mới</h4>
-        <span>Nhanh chóng và dễ dàng</span>
+    <>
+      <Helmet>
+        <title>Đăng kí</title>
+      </Helmet>
+      <div className={styles.container}>
+        <div className={styles["form__top"]}>
+          <h4>Tạo tài khoản mới</h4>
+          <span>Nhanh chóng và dễ dàng</span>
+        </div>
+
+        <form onSubmit={submitHandler}>
+          <div className={styles["form__input-name"]}>
+            <FormInput
+              className={styles["form__input"]}
+              type="text"
+              placeholder="Họ"
+              name="lastName"
+              onValidate={validateBlank}
+              message={blankMessage}
+              setValue={setLastName}
+              isError={!isValid.lastName}
+            />
+            <FormInput
+              className={styles["form__input"]}
+              type="text"
+              placeholder="Tên"
+              name="firstName"
+              onValidate={validateBlank}
+              message={blankMessage}
+              setValue={setFirstName}
+              isError={!isValid.firstName}
+            />
+          </div>
+          <FormInput
+            className={styles["form__input"]}
+            type="text"
+            placeholder="Username"
+            name="username"
+            onValidate={validateBlank}
+            message={blankMessage}
+            setValue={setUsername}
+            isError={!isValid.username}
+            message={message || blankMessage}
+          />
+          <FormInput
+            className={styles["form__input"]}
+            type="password"
+            placeholder="Password"
+            name="password"
+            onValidate={validatePassword}
+            message="Password length must greater than 6"
+            setValue={setPassword}
+            isError={!isValid.password}
+          />
+
+          <DateSelection setDate={setBirthday} />
+
+          <SexSelection setValue={setSex} />
+
+          <div className={styles["register__button"]}>
+            <SmallButton type="submit">Đăng ký</SmallButton>
+          </div>
+
+          <div className={styles["signin-action"]}>
+            <Link to="/auth/login">Bạn đã có tài khoản ?</Link>
+          </div>
+        </form>
+
+        {status === "loading" && (
+          <div className={styles.loading}>
+            <Spinner />
+          </div>
+        )}
       </div>
-
-      <form onSubmit={submitHandler}>
-        <div className={styles["form__input-name"]}>
-          <FormInput
-            className={styles["form__input"]}
-            type="text"
-            placeholder="Họ"
-            name="lastName"
-            onValidate={validateBlank}
-            message={blankMessage}
-            setValue={setLastName}
-            isError={!isValid.lastName}
-          />
-          <FormInput
-            className={styles["form__input"]}
-            type="text"
-            placeholder="Tên"
-            name="firstName"
-            onValidate={validateBlank}
-            message={blankMessage}
-            setValue={setFirstName}
-            isError={!isValid.firstName}
-          />
-        </div>
-        <FormInput
-          className={styles["form__input"]}
-          type="text"
-          placeholder="Username"
-          name="username"
-          onValidate={validateBlank}
-          message={blankMessage}
-          setValue={setUsername}
-          isError={!isValid.username}
-          message={message || blankMessage}
-        />
-        <FormInput
-          className={styles["form__input"]}
-          type="password"
-          placeholder="Password"
-          name="password"
-          onValidate={validatePassword}
-          message="Password length must greater than 6"
-          setValue={setPassword}
-          isError={!isValid.password}
-        />
-
-        <DateSelection setDate={setBirthday} />
-
-        <SexSelection setValue={setSex} />
-
-        <div className={styles["register__button"]}>
-          <SmallButton type="submit">Đăng ký</SmallButton>
-        </div>
-
-        <div className={styles["signin-action"]}>
-          <Link to="/auth/login">Bạn đã có tài khoản ?</Link>
-        </div>
-      </form>
-    </div>
+    </>
   );
 }

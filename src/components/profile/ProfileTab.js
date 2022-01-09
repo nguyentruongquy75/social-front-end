@@ -38,14 +38,14 @@ export default function ProfileTab() {
           </NavLink>
         </li>
 
-        <li>
+        {/* <li>
           <NavLink
             className={({ isActive }) => (isActive ? styles.active : "")}
             to={`${path}/photo`}
           >
             Ảnh
           </NavLink>
-        </li>
+        </li> */}
       </ul>
     </div>
   );

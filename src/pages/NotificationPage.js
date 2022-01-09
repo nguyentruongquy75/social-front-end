@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import Helmet from "react-helmet";
 import Notification from "../components/notification/Notification";
 import { API_user } from "../config";
 import userContext from "../context/userCtx";
@@ -53,17 +54,22 @@ export default function NotificationPage() {
   });
 
   return (
-    <div className={styles["container"]}>
-      <h6 className={styles["heading"]}>Thông báo</h6>
+    <>
+      <Helmet>
+        <title>Thông báo</title>
+      </Helmet>
+      <div className={styles["container"]}>
+        <h6 className={styles["heading"]}>Thông báo</h6>
 
-      <div>
-        {notifications.length === 0 && (
-          <div className={styles.message}>Chưa có thông báo nào</div>
-        )}
-        {notifications.map((noti) => (
-          <Notification notification={noti} />
-        ))}
+        <div>
+          {notifications.length === 0 && (
+            <div className={styles.message}>Chưa có thông báo nào</div>
+          )}
+          {notifications.map((noti) => (
+            <Notification notification={noti} />
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
+import Helmet from "react-helmet";
 import { useDispatch } from "react-redux";
 import { Route, Routes, useParams } from "react-router-dom";
 import Overlay from "../components/overlay/Overlay";
@@ -181,6 +182,9 @@ export default function ProfilePage(props) {
 
   return (
     <>
+      <Helmet>
+        <title>{user && user.fullName}</title>
+      </Helmet>
       {user && (
         <>
           <div className={styles["profile__top"]}>
